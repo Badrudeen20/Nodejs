@@ -2,22 +2,25 @@ const express = require('express')
 const UserController = require('../app/controller/UserController');
 const AuthController = require('../app/controller/AuthController');
 const  group = require('../app/helper/group');
-const { checkAuth, checkGuest } = require('../app/middleware/checkAuth');
+const  auth  = require('../app/middleware/auth');
+const { forwardAuthenticated,ensureAuthenticated } = require('../app/config/auth');
+
 const router = express.Router()
 router.get('/',(req,res)=>{
       return res.send('Home')
 });
 
-router.all('/login',checkGuest,AuthController.login);
-
-router.use("/auth", checkAuth, group((router) => {
-      router.get('/user',UserController.view);
-      router.get('/list',UserController.list);
-      router.post('/add',UserController.addUser);
-      router.post('/edit',UserController.editUser);
-      router.post('/update',UserController.updateUser);
-      router.get('/delete/:id',UserController.deleteUser);
+router.all('/login',forwardAuthenticated,AuthController.login);
+router.all('/register',forwardAuthenticated,AuthController.register);
+router.use("/dashboard", ensureAuthenticated, group((router) => {
+      router.get('/',UserController.view); 
+      
 }));
+router.get('/logout',ensureAuthenticated, (req, res) => {
+      req.logout();
+      req.flash('success_msg', 'You are logged out');
+      res.redirect('/login');
+});
 
 
 

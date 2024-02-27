@@ -1,30 +1,37 @@
-const express = require("express");
-const db = require('../models/index')
-const { Op } = require('sequelize');
-const { setUser } = require("../helper/auth");
-const { v4: uuidv4 } = require("uuid");
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+const passport = require('passport');
 module.exports = {
     
-    login:async function(req,res){ 
+    login:async function(req,res,next){ 
       if (req.method === 'GET') {
-            return res.render('auth/login')
+            return res.render('frontend/login',{ layout: 'frontend/layout' })
       } else if (req.method === 'POST') {
             const { email,password } = req.body;
-            const user = await db.Users.findOne({ where: { email } });
-            if (user) {
-                  // const isPasswordValid = await bcrypt.compare(providedPassword, user.password);
-                  if (user.password==password) {
-                    const sessionId = uuidv4();
-                    setUser(sessionId, user);
-                    res.cookie("uid", sessionId);
-                    return res.redirect('auth/user');
-                  } else {
-                    return res.redirect('back')
-                  }
-                } else {
-                  return res.redirect('back')
-                }
-
+            passport.authenticate('local', {
+              successRedirect: '/dashboard',
+              failureRedirect: '/login',
+              failureFlash: true
+            })(req, res, next);
+           
+      } else {
+        res.status(405).send('Method Not Allowed');
+      }
+     
+    },
+    register:async function(req,res){ 
+      if (req.method === 'GET') {
+            return res.render('frontend/register',{ layout: 'frontend/layout' })
+      } else if (req.method === 'POST') {
+            const { email,password,username } = req.body;
+            const newUser = await prisma.user.create({
+              data: {
+                email: email,
+                password: password,
+                username:username
+              },
+            });
+            return res.redirect('/login')
       } else {
         res.status(405).send('Method Not Allowed');
       }
