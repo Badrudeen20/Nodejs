@@ -3,6 +3,9 @@ const prisma = new PrismaClient();
 const passport = require('passport');
 module.exports = {
     
+    view:async function(req,res){
+      return res.render('frontend/welcome',{ layout: 'frontend/layout' })
+    },
     login:async function(req,res,next){ 
       if (req.method === 'GET') {
             return res.render('frontend/login',{ layout: 'frontend/layout' })

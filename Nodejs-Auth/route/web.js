@@ -6,9 +6,7 @@ const  auth  = require('../app/middleware/auth');
 const { forwardAuthenticated,ensureAuthenticated } = require('../app/config/auth');
 
 const router = express.Router()
-router.get('/',(req,res)=>{
-      return res.send('Home')
-});
+router.get('/',AuthController.view);
 
 router.all('/login',forwardAuthenticated,AuthController.login);
 router.all('/register',forwardAuthenticated,AuthController.register);

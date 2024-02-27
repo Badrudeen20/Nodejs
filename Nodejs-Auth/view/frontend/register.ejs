@@ -5,13 +5,13 @@
         <i class="fas fa-user-plus"></i> Register
       </h1>
       <%= include ("../partials/messages"); %>
-      <form action="/users/register" method="POST">
+      <form action="/register" method="POST">
         <div class="form-group">
           <label for="name">Name</label>
           <input
             type="name"
             id="name"
-            name="name"
+            name="username"
             class="form-control"
             placeholder="Enter Name"
             value="<%= typeof name != 'undefined' ? name : '' %>"
@@ -39,22 +39,12 @@
             value="<%= typeof password != 'undefined' ? password : '' %>"
           />
         </div>
-        <div class="form-group">
-          <label for="password2">Confirm Password</label>
-          <input
-            type="password"
-            id="password2"
-            name="password2"
-            class="form-control"
-            placeholder="Confirm Password"
-            value="<%= typeof password2 != 'undefined' ? password2 : '' %>"
-          />
-        </div>
+        
         <button type="submit" class="btn btn-primary btn-block">
           Register
         </button>
       </form>
-      <p class="lead mt-4">Have An Account? <a href="/users/login">Login</a></p>
+      <p class="lead mt-4">Have An Account? <a href="/login">Login</a></p>
     </div>
   </div>
 </div>

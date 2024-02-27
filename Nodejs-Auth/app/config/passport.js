@@ -9,7 +9,7 @@ module.exports = function(passport) {
       
     
       // By ID
-      prisma.User.findUnique({
+      prisma.user.findUnique({
         where: {
           email:email,
         },
@@ -54,7 +54,7 @@ module.exports = function(passport) {
   });
 
   passport.deserializeUser(async function(id, done) {
-    const user = prisma.User.findUnique({
+    const user = prisma.user.findUnique({
       where: {
         id:id,
       },
