@@ -22,7 +22,7 @@ const WorkoutForm = () => {
 
     const workout = {title, load, reps}
 
-    const response = await fetch('http://localhost:5000/api/employee', {
+    const response = await fetch(process.env.URL+'/api/employee', {
       method: 'POST',
       body: JSON.stringify(workout),
       headers: {
