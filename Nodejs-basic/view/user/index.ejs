@@ -23,7 +23,6 @@
                   <a class="nav-link" href="#">Link</a>
                 </li>
               </ul>
-         
             </div>
       </nav>
       <div class="container mt-2">
@@ -46,55 +45,55 @@
           
         </div>
 
-        <!-- Add User Modal -->
-        <div class="modal fade" id="addUserModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <form class="modal-content" method="post" action="/add">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="addUserModelLabel">Add User</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <!-- Add User Modal -->
+      <div class="modal fade" id="addUserModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <form class="modal-content" method="post" action="/add">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="addUserModelLabel">Add User</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" id="username" >
               </div>
-              <div class="modal-body">
-                <div class="mb-3">
-                  <label for="username" class="form-label">Username</label>
-                  <input type="text" name="username" class="form-control" id="username" >
-                </div>
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email address</label>
-                  <input type="email" name="email" class="form-control" id="email" aria-describedby="email">
-                </div>
-                <div class="mb-3">
-                  <label for="password" class="form-label">Password</label>
-                  <input type="password" name="password" class="form-control" id="password">
-                </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" name="email" class="form-control" id="email" aria-describedby="email">
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="password">
+              </div>
 
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div>
-            </form>
-          </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
         </div>
-        <!-- Add User Modal -->
+      </div>
+      <!-- Add User Modal -->
 
-        <!-- Edit User Modal -->
-        <div class="modal fade" id="editUserModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <form class="modal-content" method="post" action="/update">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="editUserModelLabel">Update User</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body" id="editUserField"></div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div>
-            </form>
-          </div>
+      <!-- Edit User Modal -->
+      <div class="modal fade" id="editUserModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <form class="modal-content" method="post" action="/update">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="editUserModelLabel">Update User</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="editUserField"></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
         </div>
-        <!-- Edit User Modal -->
+      </div>
+      <!-- Edit User Modal -->
 
       
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>

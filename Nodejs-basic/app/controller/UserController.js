@@ -1,6 +1,6 @@
-const express = require("express");
 const db = require('../models/index')
 const { Op } = require('sequelize');
+
 module.exports = {
     
     view:async function(req,res){ 
@@ -46,7 +46,7 @@ module.exports = {
     addUser:async function(req,res){
       const { username, email,password } = req.body;
       const user = await db.Users.create({ username, email,password });
-      return res.redirect('/')
+      return res.redirect('back');
     },
     editUser:async function(req,res){
       const { id } = req.body;
@@ -59,13 +59,13 @@ module.exports = {
       user.username = username;
       user.email = email;
       await user.save();
-      return res.redirect('/')
+      return res.redirect('back');
     },
     deleteUser:async function(req,res){
       const { id } = req.params;
       const user = await db.Users.findByPk(id);
       await user.destroy();
-      return res.redirect('/')
+      return res.redirect('back');
     },
 
  
