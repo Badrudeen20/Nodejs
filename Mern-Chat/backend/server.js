@@ -14,7 +14,6 @@ app.use(express.urlencoded({extended:true}))
 // routes
 app.use('/api/workout', auth)
 app.use('/api/user', web)
-
 app.listen( PORT, function() {
    console.log( 'server running on ' + PORT );
 });
