@@ -1,25 +1,24 @@
 import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
 import { useAuthContext } from '../hooks/useAuthContext'
-
 // date fns
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { useHttp } from '../hooks/useHttp'
 
 const WorkoutDetails = ({ workout }) => {
   const { dispatch } = useWorkoutsContext()
   const { user } = useAuthContext()
-
+  const { http } = useHttp()
   const handleClick = async () => {
     if (!user) {
       return
     }
 
-    const response = await fetch(process.env.URL+'/api/employee/' + workout._id, {
+    const {json,response} = await http('/api/workout/'+ workout.id,{
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${user.token}`
       }
     })
-    const json = await response.json()
 
     if (response.ok) {
       dispatch({type: 'DELETE_WORKOUT', payload: json})

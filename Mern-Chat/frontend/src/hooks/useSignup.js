@@ -1,37 +1,32 @@
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
+import { useHttp } from './useHttp'
 
 export const useSignup = () => {
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(null)
   const { dispatch } = useAuthContext()
-
+  const [emptyFields, setEmptyFields] = useState([])
+  const { http } = useHttp()
   const signup = async (email, password,username) => {
     setIsLoading(true)
     setError(null)
-
-    const response = await fetch(process.env.URL+'/api/user/signup', {
+    const {json,response} = await http('/api/user/signup',{
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ email, password,username})
     })
-    const json = await response.json()
-
     if (!response.ok) {
       setIsLoading(false)
       setError(json.error)
+      setEmptyFields(json.emptyFields)
     }
     if (response.ok) {
-      // save the user to local storage
       localStorage.setItem('user', JSON.stringify(json))
-
-      // update the auth context
       dispatch({type: 'LOGIN', payload: json})
-
-      // update loading state
       setIsLoading(false)
     }
   }
 
-  return { signup, isLoading, error }
+  return { signup, isLoading, error, emptyFields }
 }

@@ -5,7 +5,7 @@ const Signup = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
-  const {signup, error, isLoading} = useSignup()
+  const {signup, error, isLoading, emptyFields} = useSignup()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -19,18 +19,21 @@ const Signup = () => {
       <label>User Name:</label>
       <input 
         type="text" 
+        className={emptyFields.includes('username') ? 'error' : ''}
         onChange={(e) => setUsername(e.target.value)} 
         value={username} 
       />
       <label>Email address:</label>
       <input 
         type="email" 
+        className={emptyFields.includes('email') ? 'error' : ''}
         onChange={(e) => setEmail(e.target.value)} 
         value={email} 
       />
       <label>Password:</label>
       <input 
         type="password" 
+        className={emptyFields.includes('password') ? 'error' : ''}
         onChange={(e) => setPassword(e.target.value)} 
         value={password} 
       />

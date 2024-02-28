@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
 // routes
-app.use('/api/employee', auth)
+app.use('/api/workout', auth)
 app.use('/api/user', web)
 
 app.listen( PORT, function() {

@@ -18,7 +18,7 @@ const getWorkouts = async (req, res) => {
 const getWorkout = async (req, res) => {
   const { id } = req.params
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!id) {
     return res.status(404).json({error: 'No such workout'})
   }
 
@@ -37,7 +37,7 @@ const getWorkout = async (req, res) => {
 // create new workout
 const createWorkout = async (req, res) => {
   const {title, load, reps} = req.body
-
+ 
   let emptyFields = []
 
   if(!title) {
@@ -57,7 +57,12 @@ const createWorkout = async (req, res) => {
   try {
     const user_id = req.user.id
     const workout = await prisma.employee.create({
-      data: {title, load, reps, user_id}
+      data: {
+        title, 
+        load:parseInt(load), 
+        reps:parseInt(reps), 
+        user_id
+      }
     })
     res.status(200).json(workout)
   } catch (error) {
@@ -68,7 +73,7 @@ const createWorkout = async (req, res) => {
 // delete a workout
 const deleteWorkout = async (req, res) => {
   const { id } = req.params
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!id) {
     return res.status(404).json({error: 'No such workout'})
   }
   
