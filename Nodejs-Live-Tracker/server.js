@@ -63,6 +63,7 @@ io.on("connection", (socket) => {
                     const users = await prisma.User.findMany({
                         where: {status:1}
                     });
+                    console.log(users)
                     io.emit("users-location", users);
                   }
                   // io.to(userData.userId).emit("user-coords", update);
