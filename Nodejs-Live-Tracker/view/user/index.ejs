@@ -44,17 +44,17 @@
       });
 
       socket.on("user-connected", (data) => {
-           user.userId = data.id
+           user.id = data.id
       });
 
       navigator.geolocation.watchPosition((data) => {
-            if (user.userId) {
+            if (user.id) {
                   if (user.mobile) {
                         let { latitude, longitude } = data.coords;
                         let userData = {
                               latitude: latitude,
                               longitude: longitude,
-                              id:user.userId
+                              id:user.id
                         };
                         socket.emit("update", userData);
                   }
