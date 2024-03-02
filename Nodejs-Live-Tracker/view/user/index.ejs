@@ -48,7 +48,7 @@
       });
 
       navigator.geolocation.watchPosition((data) => {
-            if (userExist) {
+            if (user.userId) {
                   if (user.mobile) {
                         let { latitude, longitude } = data.coords;
                         let userData = {

@@ -32,7 +32,6 @@ io.on("connection", (socket) => {
             
             if (room.mobile) {
                   if (Object.keys(rooms).length) {
-                        console.log(rooms)
                    /*  for (const key in rooms) {
                       if (rooms[key] == room.mobile) {
                         if (key !== room.status) {
@@ -44,7 +43,7 @@ io.on("connection", (socket) => {
                      const user  = await prisma.User.findUnique({  where: {
                         mobile:room.mobile,
                      }})
-                     console.log(user)
+                     console.log(user,rooms)
                      if (user) {
                         let socketId = socket.id;
                         socket.join(user.mobile);
@@ -67,7 +66,7 @@ io.on("connection", (socket) => {
                     const users = await prisma.User.findMany({
                         where: {status:1}
                     });
-                    
+                    console.log(users)
                     io.emit("users-location", users);
                   }
                   // io.to(userData.userId).emit("user-coords", update);
