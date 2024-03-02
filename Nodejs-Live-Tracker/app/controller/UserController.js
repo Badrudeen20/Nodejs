@@ -2,7 +2,12 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 module.exports = {
   user: async function (req, res) { 
+      const userUid = req.cookies?.uid;
       res.render("user");
+  },
+  logout: async function (req, res) { 
+    res.cookie('uid', '', { expires: new Date(0) });
+    res.redirect("/login");
   },
   login: async function (req, res) { 
       if (req.method === 'GET') {

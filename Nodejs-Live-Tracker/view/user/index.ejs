@@ -16,9 +16,14 @@
 </head>
  
 <body>
-    <div class="container">
-      Connected
-    </div>
+      <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+              <a class="navbar-brand">Navbar</a>
+              <form class="d-flex" role="search">
+                <a href="/logout" class="btn btn-outline-success">Logout</a>
+              </form>
+            </div>
+      </nav>
      <script src="socket.io/socket.io.js"></script>
      <script>
       var socket = io();
