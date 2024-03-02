@@ -33,12 +33,14 @@ io.on("connection", (socket) => {
                   const user  = await prisma.User.findUnique({  where: {
                      mobile:room.mobile,
                   }})
-                  
+                  let socketId = socket.id;
+                  socket.join(room.mobile);
                   if (user) {
-                        let socketId = socket.id;
-                        socket.join(user.mobile);
                         rooms[socketId] = user.id;
                         io.emit("user-connected", user);
+                  }else{
+                        rooms['admin'] = room.mobile;
+                        updateLocation(room.mobile)
                   }
             }
       });
@@ -54,10 +56,7 @@ io.on("connection", (socket) => {
                         },
                   })
                   if (update) {
-                    const users = await prisma.User.findMany({
-                        where: {status:1}
-                    });
-                    io.emit("users-location", users);
+                     updateLocation(rooms['admin'])
                   }
                  
             }
@@ -78,16 +77,15 @@ io.on("connection", (socket) => {
       });
 
 
-
 }); 
 
 
-/* function getUserRoom(socket) {
-   return Object.entries(rooms).reduce((users, [user]) => {
-      if (user != null) users.push(user);
-      return users;
-   }, []);
-} */
+async function updateLocation(room){
+      const users = await prisma.User.findMany({
+            where: {status:1}
+      });
+      io.to(room).emit("users-location", users);  
+}
 
 server.listen(PORT, function () {
       console.log(`Server Started at PORT:${PORT}`)
