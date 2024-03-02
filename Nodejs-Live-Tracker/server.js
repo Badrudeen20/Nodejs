@@ -29,29 +29,17 @@ const rooms = {};
 // Socket.io 
 io.on("connection", (socket) => {
       socket.on("join", async (room) => {
-            console.log(rooms)
             if (room.mobile) {
-                  if (Object.keys(rooms).length) {
-                   /*  for (const key in rooms) {
-                      if (rooms[key] == room.mobile) {
-                        if (key !== room.status) {
-                          io.emit("user-exist", false);
-                        }
-                      }
-                    } */
-                  }else{
-                     const user  = await prisma.User.findUnique({  where: {
-                        mobile:room.mobile,
-                     }})
-                    
-                     if (user) {
+                  const user  = await prisma.User.findUnique({  where: {
+                     mobile:room.mobile,
+                  }})
+                  
+                  if (user) {
                         let socketId = socket.id;
                         socket.join(user.mobile);
                         rooms[socketId] = user.id;
                         io.emit("user-connected", user);
-                      }
                   }
-             
             }
       });
 
@@ -71,11 +59,35 @@ io.on("connection", (socket) => {
                     });
                     io.emit("users-location", users);
                   }
-                  // io.to(userData.userId).emit("user-coords", update);
+                 
             }
       });
 
+     
+      socket.on("disconnect", async () => {
+           
+            if(rooms[socket.id]){
+                  const user = await prisma.User.update({
+                        where:{id:rooms[socket.id]},
+                        data: {status:0},
+                  });
+                  socket.broadcast.emit("user-disconnect", user);
+            }
+            
+            delete rooms[socket.id];   
+      });
+
+
+
 }); 
+
+
+/* function getUserRoom(socket) {
+   return Object.entries(rooms).reduce((users, [user]) => {
+      if (user != null) users.push(user);
+      return users;
+   }, []);
+} */
 
 server.listen(PORT, function () {
       console.log(`Server Started at PORT:${PORT}`)

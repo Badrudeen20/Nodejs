@@ -60,7 +60,7 @@ module.exports = {
             status: 0,
           },
         })
-        res.redirect("/");
+        res.redirect("/user");
       }else{
         req.flash('info', 'This number is already exist!');
         return res.redirect("back");
