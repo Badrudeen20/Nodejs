@@ -43,10 +43,6 @@
             }
       });
 
-      socket.on("user-exist", (boolean) => {
-         console.log(boolean + " is user exist");
-      });
-
       socket.on("user-connected", (data) => {
            user.userId = data.id
       });
