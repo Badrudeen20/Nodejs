@@ -28,10 +28,8 @@
           console.log('Connected to Server');
       });
 
-
-
-
       socket.on("users-location", (users) => {
+        console.log(users)
         users.forEach((user) => {
           if (user.longitude && user.latitude) {
             for (const key in markers) {

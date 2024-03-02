@@ -29,6 +29,7 @@ const rooms = {};
 // Socket.io 
 io.on("connection", (socket) => {
       socket.on("join", async (room) => {
+            console.log(room)
             if (room.mobile) {
                   if (Object.keys(rooms).length) {
                     for (const key in rooms) {
