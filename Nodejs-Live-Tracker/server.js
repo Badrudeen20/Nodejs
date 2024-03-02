@@ -39,6 +39,7 @@ io.on("connection", (socket) => {
                         rooms[socketId] = user.id;
                         io.emit("user-connected", user);
                   }else{
+                       
                         rooms['admin'] = room.mobile;
                         updateLocation(room.mobile)
                   }
