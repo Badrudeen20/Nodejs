@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
+    <style>
+      body { margin: 0; padding: 0; }
+      #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+   </style>
+</head>
+<body>
+   
+     <div id="map"></div>
+     <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+     <script src="socket.io/socket.io.js"></script>
+     <script>
+      let markers = {};
+      mapboxgl.accessToken ="pk.eyJ1IjoiYmFkcnVkZWVuMjAiLCJhIjoiY2t0bGt6b2huMXgzbzJ2cW51YjVpbTU5dyJ9.CIhNiYM7itOcqIDp5cgYjA";
+      const map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/satellite-v9",
+      });
+      var socket = io();
+      // connection with server
+      socket.on('connect', function () {
+          console.log('Connected to Server');
+      });
+
+
+
+
+      socket.on("users-location", (users) => {
+        users.forEach((user) => {
+          if (user.longitude && user.latitude) {
+            for (const key in markers) {
+              if (markers[key] == markers[user.id]) {
+                markers[user.id]
+                .setLngLat([user.longitude, user.latitude])
+                .addTo(map);
+              }
+            }
+          }
+        });
+      });
+
+
+      socket.on("user-connected", (userData) => {
+        if (markers[userData.id]) {
+          markers[userData.id].remove();
+        }
+        markers[userData.id] = new mapboxgl.Marker({});
+        console.log(userData.username + " is connected");
+      });
+     
+  </script>
+  
+</body>
+</html>

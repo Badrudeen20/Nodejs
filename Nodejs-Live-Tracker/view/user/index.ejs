@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <style>
+      body { margin: 0; padding: 0; }
+      #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+      .container{
+         height:100vh
+      }
+   </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" >
+</head>
+ 
+<body>
+    <div class="container">
+      Connected
+    </div>
+     <script src="socket.io/socket.io.js"></script>
+     <script>
+      var socket = io();
+      const mobile = getCookie('uid');
+      let user = {};
+      let userExist = false;
+      if (mobile) {
+         user.mobile = mobile
+         user.status = 1
+         
+      } 
+      
+      
+      socket.on("connect", () => {
+            if (user.mobile) {
+               socket.emit("join", user);
+            }
+      });
+
+      socket.on("user-exist", (boolean) => {
+         console.log(boolean + " is user exist");
+      });
+
+      socket.on("user-connected", (data) => {
+           user.userId = data.id
+      });
+
+      navigator.geolocation.watchPosition((data) => {
+            if (userExist) {
+                  if (user.mobile) {
+                        let { latitude, longitude } = data.coords;
+                        let userData = {
+                              latitude: latitude,
+                              longitude: longitude,
+                              id:user.userId
+                        };
+                        socket.emit("update", userData);
+                  }
+            }
+      },(err) => console.log(err),{
+            enableHighAccuracy: true
+      });
+     
+
+      // Function to get the value of a cookie by its name
+      function getCookie(name) {
+            const cookies = document.cookie.split(';');
+            for (const cookie of cookies) {
+              const [cookieName, cookieValue] = cookie.trim().split('=');
+              if (cookieName === name) {
+                  return decodeURIComponent(cookieValue);
+              }
+            }
+            return null;
+      }
+
+
+     </script>
+    
+</body>
+</html>
