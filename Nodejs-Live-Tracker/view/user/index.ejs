@@ -45,9 +45,19 @@
 
       socket.on("user-connected", (data) => {
            user.id = data.id
+           if(user.location){
+                  let userData = {
+                  latitude: '',
+                  longitude: '',
+                  id:user.id
+                  };
+                  socket.emit("update", userData);
+            }
+           
       });
 
       navigator.geolocation.watchPosition((data) => {
+            user.location = false  
             if (user.id) {
                   if (user.mobile) {
                         let { latitude, longitude } = data.coords;
@@ -59,9 +69,9 @@
                         socket.emit("update", userData);
                   }
             }
-      },(err) => console.log(err),{
-            enableHighAccuracy: true
-      });
+      },(err) =>{
+         user.location = true  
+      },{enableHighAccuracy: true});
      
 
       // Function to get the value of a cookie by its name

@@ -46,6 +46,7 @@ io.on("connection", (socket) => {
       });
 
       socket.on("update", async (userData) => {
+            
             if (userData) {
                   const update = await prisma.User.update({
                         where: {id:userData.id},
@@ -64,15 +65,13 @@ io.on("connection", (socket) => {
 
      
       socket.on("disconnect", async () => {
-           
             if(rooms[socket.id]){
                   const user = await prisma.User.update({
                         where:{id:rooms[socket.id]},
                         data: {status:0},
                   });
                   socket.broadcast.emit("user-disconnect", user);
-            }
-            
+            } 
             delete rooms[socket.id];   
       });
 
