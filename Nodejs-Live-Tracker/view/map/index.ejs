@@ -28,8 +28,9 @@
       });
 
       socket.on("users-location", (users) => {
+        console.log(users)
         users.forEach((user) => {
-          if (user.longitude && user.latitude) {
+          if (user.longitude && user.latitude && Object.keys(markers).length) {
             for (const key in markers) {
               if (markers[key] == markers[user.id]) {
                 markers[user.id]
@@ -37,6 +38,8 @@
                 .addTo(map);
               }
             }
+          }else{
+            markers[user.id] = new mapboxgl.Marker({});
           }
         });
       });

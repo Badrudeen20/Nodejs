@@ -37,9 +37,8 @@ io.on("connection", (socket) => {
                   socket.join(room.mobile);
                   if (user) {
                         rooms[socketId] = user.id;
-                        io.emit("user-connected", user);
+                        io.emit("user-connected", user); 
                   }else{
-                       
                         rooms['admin'] = room.mobile;
                         updateLocation(room.mobile)
                   }
