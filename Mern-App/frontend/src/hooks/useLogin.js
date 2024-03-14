@@ -24,8 +24,6 @@ export const useLogin = () => {
       dispatch({type: 'LOGIN', payload: json})
       setIsLoading(false)
     }
-  
   }
-
   return { login, isLoading, error }
 }
