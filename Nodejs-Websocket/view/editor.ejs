@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+</head>
+<body>
+      <textarea id="editor" cols="30" rows="10"></textarea>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" ></script>
+      <script src="socket.io/socket.io.js"></script>
+      <script>
+            const socket = io.connect()
+            socket.on("new message",data=>{
+                 $('#editor').val(data.msg) 
+            })
+            $('#editor').keypress(e=>{
+                 socket.emit("send message",e.target.value)
+            })
+      </script>
+</body>
+</html>
