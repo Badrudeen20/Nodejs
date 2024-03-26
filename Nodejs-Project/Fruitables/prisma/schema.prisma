@@ -1,22 +1,74 @@
 // This is your Prisma schema file,
-// This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String
-  email     String  @unique
-  password  String
-  role      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  username  String   @unique @db.VarChar(150)
+  email     String   @unique @db.VarChar(150)
+  password  String   @db.VarChar(150)
+  role      String   @db.VarChar(150)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("users")
+}
+
+model Category {
+  id          Int        @id @default(autoincrement())
+  product     Product    @relation(fields: [productId], references: [id])
+  productId   Int        @map("product_id") // Change the type to Int to match the referenced field
+  additional  String     @db.VarChar(150)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  @@map("categories")
+}
+
+model Brand {
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(150)
+  status       Int        @default(0) @db.Int
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  products     Product[]
+  @@map("bands")
+}
+
+
+
+model Product {
+  id             Int            @id @default(autoincrement())
+  name           String         @unique
+  search         String
+  price          Float
+  rating         Int            @default(0)
+  status         Int            @default(0)
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  brand          Brand          @relation(fields: [brandId], references: [id])
+  brandId        Int            @map("brand_id")
+  productDetails ProductDetail[] // Assuming ProductDetail has a one-to-many relation with Product
+  categories     Category[]     // Define an array of Category to represent the one-to-many relation
+  @@map("products")
+}
+
+model ProductDetail {
+  id           Int      @id @default(autoincrement())
+  product      Product  @relation(fields: [productId], references: [id])
+  productId    Int      @map("product_id")
+  mrp          Float    @db.Float 
+  description  String?  @db.Text
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  @@map("product_details")
 }
