@@ -4,7 +4,7 @@ const { Op } = require('sequelize');
 module.exports = {
     
     view:async function(req,res){ 
-      const url = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+      const url = `https://${req.get('host')}${req.originalUrl}`;
       return res.render('user/index',{url:url})
     },
     list:async function(req,res){
