@@ -7,10 +7,11 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('express-session');
 const web = require('./route/web')
+const upload = require('express-fileupload')
 // Passport Config
-
 require('./app/config/passport')(passport);
 app.use(expressLayouts);
+app.use(upload());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views',__dirname + '/view')
 app.set('view engine','ejs') 

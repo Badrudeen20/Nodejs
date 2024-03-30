@@ -5,10 +5,11 @@ const { url } = require('../../helper/url');
 module.exports = {
   
     shop:async function(req,res){
+      const user = await req.user
       const query = req.query
       const brands = await prisma.brand.findMany({
         where: {
-          status: 1,
+          status: 'ACTIVE',
         }
       })
      
@@ -23,7 +24,7 @@ module.exports = {
           id: true,
         },
         where: {
-          status: 1,
+          status: 'ACTIVE',
           brandId: {
             in: brandId,
           },
@@ -86,7 +87,7 @@ module.exports = {
       }
 
       const pageNumber = query.page || 1; // Specify the page number
-      const pageSize = 10; // Specify the number of items per page
+      const pageSize = 6; // Specify the number of items per page
       const skip = (pageNumber - 1) * pageSize; // Calculate the number of items to skip
      
       const list = await prisma.product.findMany({
@@ -101,10 +102,40 @@ module.exports = {
       const totalItems = productId.length; // Total number of items
       const totalPages = Math.ceil(totalItems / pageSize); // Calculate the total number of pages
      
-      return res.render('frontend/shop',{layout: 'Frontend/layout',url:url(req,res),brand:brands,query:query,filter:filter,product:list,page:totalPages,pageNumber:pageNumber})
+      return res.render('frontend/shop',{
+       layout: 'Frontend/layout',
+       url:url(req,res),
+       brand:brands,
+       query:query,
+       filter:filter,
+       product:list,
+       page:totalPages,
+       pageNumber:pageNumber,
+       user:user
+      })
     },
-    detail:function(req,res){
-     return res.render('frontend/shop-detail',{layout: 'Frontend/layout',url:url(req,res)})
+    detail:async function(req,res){
+    
+     const user = await req.user
+     const productId = req.params.id
+     let product = await prisma.product.findUnique({
+        where:{
+          id:parseInt(productId)
+        }
+     })
+     const categories = await prisma.category.findMany({
+      where: {
+        productId: parseInt(productId),
+      }
+     })
+     
+     return res.render('frontend/shop-detail',{
+      layout: 'Frontend/layout',
+      url:url(req,res),
+      user:user,
+      product:product,
+      categories:categories
+      })
     }
     
   

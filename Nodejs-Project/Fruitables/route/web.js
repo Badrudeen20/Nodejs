@@ -11,6 +11,7 @@ const ProductController = require('../app/controller/backend/ProductController')
 const ShopController = require('../app/controller/frontend/ShopController');
 const { TableController } = require('../app/controller/backend/TableController');
 const CartController = require('../app/controller/frontend/CartController');
+const BrandController = require('../app/controller/backend/BrandController');
 
 
 const router = express.Router()
@@ -21,20 +22,31 @@ router.all('/admin/login',adminForwardAuthenticated,AuthController.adminLogin);
 router.all('/login',userForwardAuthenticated,AuthController.login);
 router.all('/register',userForwardAuthenticated,AuthController.register);
 // Backend Controller
-
-router.use("/admin", adminEnsureAuthenticated, group((router) => {
+// adminEnsureAuthenticated
+router.use("/admin",adminEnsureAuthenticated, group((router) => {
       router.get('/dashboard',DashboardController.view); 
-      router.get('/customer',CustomerController.view); 
-      router.get('/order',OrderController.view); 
-      router.get('/product',ProductController.view); 
+      router.get('/customers',CustomerController.view); 
+      router.get('/customers/list',CustomerController.list); 
+      router.get('/orders',OrderController.view); 
+      router.get('/orders/list',OrderController.list); 
+      router.get('/products',ProductController.view); 
+      router.get('/products/list',ProductController.list); 
+      router.get('/add-product',ProductController.addEdit); 
+      router.get('/edit-product/:id',ProductController.addEdit); 
+      router.post('/create-product',ProductController.createUpdate); 
+      router.get('/brands',BrandController.view); 
+      router.get('/brands/list',BrandController.list); 
+      router.post('/brand',BrandController.add); 
+      router.post('/brand/:id',BrandController.edit); 
+      router.get('/brand/:id',BrandController.delete); 
 
 
       
-      router.post('/:table/column',TableController.tableColumn)
+     /*  router.post('/:table/column',TableController.tableColumn)
       router.post('/:table/delete',TableController.tableColumnDelete)
       router.post('/:table/rename',TableController.tableColumnRename)
       router.post('/:table/modify',TableController.tableColumnModify)
-      router.post('/:table/create',TableController.tableCreate)
+      router.post('/:table/create',TableController.tableCreate) */
       /* router.post('/:table/update',ProductController.productUpdate) */
 
 
@@ -53,28 +65,32 @@ router.use("/admin", adminEnsureAuthenticated, group((router) => {
 
 
 // Frontend Controller
-router.all('/',HomeController.view);
+router.all('/',HomeController.home);
 router.get('/home',HomeController.home);
 router.get('/shop',ShopController.shop);
-router.get('/shop-detail',ShopController.detail);
+router.get('/shop-detail/:id',ShopController.detail);
 router.get('/contact',HomeController.contact);
 
-router.use("/user", userEnsureAuthenticated, group((router) => {
-      router.get('/cart',CartController.cart);
-      router.get('/addCart/:id',CartController.addCart);
-      router.get('/logout',function(req,res){
-            req.logout(function(err){
-                  if (err) {
-                        req.flash('error_msg', 'Failed to logout');
-                        res.redirect('/'); 
-                  } else {
-                        res.redirect('/login'); 
-                  }
-            });
-            
+//Auth Frontend Controller
+router.get('/cart',userEnsureAuthenticated,CartController.cart);
+router.post('/quantity/:id',userEnsureAuthenticated,CartController.quantity);
+router.post('/coupon',userEnsureAuthenticated,CartController.coupon);
+router.all('/addCart/:id',userEnsureAuthenticated,CartController.addCart);
+router.get('/checkout',userEnsureAuthenticated,CartController.checkout);
+router.get('/delete/:id',userEnsureAuthenticated,CartController.delete);
+router.get('/logout',userEnsureAuthenticated,function(req,res){
+      req.logout(function(err){
+            if (err) {
+                  req.flash('error_msg', 'Failed to logout');
+                  res.redirect('/'); 
+            } else {
+                  res.redirect('/login'); 
+            }
       });
       
-}));
+});
+
+/* router.use("/user", userEnsureAuthenticated, group((router) => {})); */
 
 
 

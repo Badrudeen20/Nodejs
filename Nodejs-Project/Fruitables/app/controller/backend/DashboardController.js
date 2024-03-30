@@ -1,29 +1,29 @@
 const { url } = require("../../helper/url");
+const { user } = require("../../helper/user");
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 module.exports = {
     
   view:async function(req,res){
-    
-    return res.render('Backend/dashboard',{ layout: 'Backend/layout',url:url(req,res) })
-  },
-  order:async function(req,res){
+    const item = {}
+    item.order = await prisma.product.count()
+    item.customer = await prisma.user.count({
+      where:{
+        role:'user'
+      }
+    })
    
-    return res.render('Backend/dashboard',{ layout: 'Backend/layout',url:url(req,res) })
+    return res.render('Backend/dashboard',{ 
+      layout: 'Backend/layout',
+      url:url(req,res),
+      user: await user(req,res),
+      item:item
+    })
   },
-  customer:async function(req,res){
-   
-    return res.render('Backend/dashboard',{ layout: 'Backend/layout',url:url(req,res) })
-  },
-  product:async function(req,res){
-    
-    return res.render('Backend/dashboard',{ layout: 'Backend/layout',url:url(req,res) })
-  },
-  category:async function(req,res){
-   
-    return res.render('Backend/dashboard',{ layout: 'Backend/layout',url:url(req,res) })
-  },
-  profile:async function(req,res){
-   
-    return res.render('Backend/dashboard',{ layout: 'Backend/layout',url:url(req,res) })
-  },
+ 
+
+
+
+
  
 }

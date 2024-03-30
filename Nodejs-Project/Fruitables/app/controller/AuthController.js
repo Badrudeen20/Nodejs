@@ -25,7 +25,7 @@ module.exports = {
             const { email,password } = req.body;
             req.body.role= 'user'
             passport.authenticate('local', {
-              successRedirect: '/user/home',
+              successRedirect: '/home',
               failureRedirect: '/login',
               failureFlash: true
             })(req, res, next);

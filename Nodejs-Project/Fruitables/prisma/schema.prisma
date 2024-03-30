@@ -21,30 +21,28 @@ model User {
   role      String   @db.VarChar(150)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  orders    Order[]
   @@map("users")
 }
-
-model Category {
-  id          Int        @id @default(autoincrement())
-  product     Product    @relation(fields: [productId], references: [id])
-  productId   Int        @map("product_id") // Change the type to Int to match the referenced field
-  additional  String     @db.VarChar(150)
-  createdAt   DateTime   @default(now()) @map("created_at")
-  updatedAt   DateTime   @updatedAt @map("updated_at")
-  @@map("categories")
+enum BrandStatus {
+  ACTIVE
+  INACTIVE
 }
 
 model Brand {
   id           Int      @id @default(autoincrement())
-  name         String   @db.VarChar(150)
-  status       Int        @default(0) @db.Int
+  name         String    @db.VarChar(150)
+  status       BrandStatus      @default(ACTIVE) 
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
   products     Product[]
   @@map("bands")
 }
 
-
+enum ProductStatus {
+  ACTIVE
+  INACTIVE
+}
 
 model Product {
   id             Int            @id @default(autoincrement())
@@ -52,23 +50,66 @@ model Product {
   search         String
   price          Float
   rating         Int            @default(0)
-  status         Int            @default(0)
+  status         ProductStatus  @default(ACTIVE)
+  image          String?
+  description    String?        @db.Text
   createdAt      DateTime       @default(now()) @map("created_at")
   updatedAt      DateTime       @updatedAt @map("updated_at")
   brand          Brand          @relation(fields: [brandId], references: [id])
   brandId        Int            @map("brand_id")
-  productDetails ProductDetail[] // Assuming ProductDetail has a one-to-many relation with Product
-  categories     Category[]     // Define an array of Category to represent the one-to-many relation
+  categories     Category[]
+  orders         Order[]
   @@map("products")
 }
 
-model ProductDetail {
+model Category {
+  id          Int        @id @default(autoincrement())
+  product     Product    @relation(fields: [productId], references: [id])
+  productId   Int        @map("product_id") 
+  additional  String     @db.VarChar(150)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  @@map("categories")
+}
+
+
+enum Status {
+     CART
+     CHECKOUT
+     PAYMADE
+     PAYINPROGRESS
+     PAYCANCLE
+     PAYDONE
+
+}
+
+model Order {
   id           Int      @id @default(autoincrement())
+  user         User     @relation(fields: [userId], references: [id])
+  userId       Int      @map("user_id")
   product      Product  @relation(fields: [productId], references: [id])
   productId    Int      @map("product_id")
-  mrp          Float    @db.Float 
-  description  String?  @db.Text
+  price        Float    @db.Float 
+  discount     Float    @db.Float @default(0)
+  quantity     Int      @default(1)
+  status       Status   @default(CART)
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
-  @@map("product_details")
+  @@map("orders")
+}
+
+enum CouponStatus {
+   ACTIVE
+   INACTIVE
+}
+
+model Coupon {
+  id           Int      @id @default(autoincrement())
+  code         String   @unique
+  discount     Float    @db.Float @default(0)
+  validity     DateTime?
+  status       CouponStatus   @default(ACTIVE)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  @@map("coupons")
 }

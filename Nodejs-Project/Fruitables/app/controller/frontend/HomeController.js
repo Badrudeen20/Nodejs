@@ -3,20 +3,18 @@ const prisma = new PrismaClient();
 const passport = require('passport');
 const { url } = require('../../helper/url');
 module.exports = {
-    view:function(req,res){
-     return res.render('frontend/index',{layout: 'Frontend/layout',url:url(req,res)})
-    },
+  
     home:async function(req,res){
-        const brands = await prisma.brand.findMany({
+      const brands = await prisma.brand.findMany({
             where: {
-              status: 1,
+              status: 'ACTIVE',
             }
-        })
-
-        
+      })
+     
+      const user = await req.user
       const products = await prisma.product.findMany({
         where: {
-          status: 1,
+          status: 'ACTIVE',
           brandId:{
             in:brands.map(item=>item.id)
           }
@@ -24,10 +22,17 @@ module.exports = {
         take: 8,
       })
         
-        return res.render('frontend/index',{layout: 'Frontend/layout',url:url(req,res),brand:brands,products:products})
+      return res.render('frontend/index',{
+        layout: 'Frontend/layout',
+        url:url(req,res),
+        brand:brands,
+        products:products,
+        user:user
+      })
     },
-    contact:function(req,res){
-        return res.render('frontend/contact',{layout: 'Frontend/layout',url:url(req,res)})
+    contact:async function(req,res){
+        const user = await req.user
+        return res.render('frontend/contact',{layout: 'Frontend/layout',url:url(req,res),user:user})
     }
   
 }

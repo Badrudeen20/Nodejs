@@ -1,0 +1,122 @@
+    <div class="content-wrapper">
+      <div class="row">
+       
+       
+        <div class="col-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Product Form</h4>
+              <p class="card-description">
+                Add Product
+               
+              </p>
+            
+              <form class="forms-sample" enctype="multipart/form-data" action="<%-url%>admin/create-product" method="post">
+                <% if (typeof item.product !== 'undefined') { %>
+                  <input type="hidden" name="id" class="form-control" value="<%-item.product.id%>"  />
+                  <input type="hidden" name="catId" class="form-control" value="<%-item.product.categories[0].id%>"  />
+                <% } %>
+                <div class="form-group">
+                  <label for="exampleInputName1">Name</label>
+                  <input type="text" name="name" class="form-control" id="name" 
+                  <% if (typeof item.product !== 'undefined') { %>
+                    value="<%-item.product.name%>"
+                  <% } %>
+                   placeholder="Enter Name">
+                </div>
+                <div class="form-group">
+                    <label for="exampleSelectGender">Brand</label>
+                    <select class="form-control" name="brand" id="brand">
+                      <%item.brand.forEach(brand=>{ %>
+                        <option value="<%=brand.id%>" 
+                          <% if (typeof item.product !== 'undefined') { %>
+                             <%-(item.product.brandId==brand.id) ? 'selected':''%>
+                          <%}%>  
+                        ><%=brand.name%></option>
+                      <% }) %>
+                    </select>
+                </div>
+                <div class="form-group">
+                  <label for="price">Price</label>
+                  <input type="number" name="price" class="form-control"
+                  <% if (typeof item.product !== 'undefined') { %>
+                    value="<%-item.product.price%>"
+                  <% } %>
+                  id="price" placeholder="Enter Price">
+                </div>
+                <div class="form-group">
+                  <label for="status">Additional</label>
+                  <select class="form-control"  name="additional" id="status">
+                    <option value="Organic">Organic</option>
+                    <option value="Healthy">Healthy</option>
+                    <option value="Fresh">Fresh</option>
+                    <option value="Sale">Sale</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="search">Search</label>
+                  <input type="text" name="search" class="form-control" 
+                  <% if (typeof item.product !== 'undefined') { %>
+                    value="<%-item.product.search%>"
+                  <% } %>
+                  id="search" placeholder="Enter search keyword">
+                </div>
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select class="form-control" name="status" id="status">
+                      <option value="ACTIVE" >Active</option>
+                      <option value="INACTIVE">In active</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                  <label>File upload</label>
+                  <input type="file" name="img" class="file-upload-default">
+                  <div class="input-group col-xs-12">
+                    <input type="text" class="form-control file-upload-info" 
+                    style="pointer-events: none"
+                    name="filename"
+                    <% if (typeof item.product !== 'undefined') { %>
+                      value="<%=item.product.image%>"
+                    <%}%>
+            
+                    placeholder="Upload Image">
+                    <span class="input-group-append">
+                      <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                    </span>
+                  </div>
+                </div>
+            
+                <div class="form-group">
+                  <label for="exampleTextarea1">Textarea</label>
+                  <textarea class="form-control" name="desc" 
+                  id="exampleTextarea1" rows="4"><% if (typeof item.product !== 'undefined') { %><%=item.product.description%>
+                  <%}%>
+                </textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <!-- <button class="btn btn-light">Cancel</button> -->
+              </form>
+            </div>
+          </div>
+        </div>
+      
+     
+      
+
+      </div>
+    </div>
+    <script src="<%- url %>backend/vendors/base/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="<%- url %>backend/js/off-canvas.js"></script>
+    <script src="<%- url %>backend/js/hoverable-collapse.js"></script>
+    <script src="<%- url %>backend/js/template.js"></script>
+    <!-- endinject -->
+    <!-- plugin js for this page -->
+    <script src="<%- url %>backend/vendors/typeahead.js/typeahead.bundle.min.js"></script>
+    <script src="<%- url %>backend/vendors/select2/select2.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- Custom js for this page-->
+    <script src="<%- url %>backend/js/file-upload.js"></script>
+    <script src="<%- url %>backend/js/typeahead.js"></script>
+    <script src="<%- url %>backend/js/select2.js"></script>

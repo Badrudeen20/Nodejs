@@ -27,7 +27,8 @@
             <!-- partial:partials/_navbar.html -->
             <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
               <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo" href="index.html"><img src="<%- url %>backend/images/logo.svg" alt="logo"/></a>
+                <!-- <a class="navbar-brand brand-logo" href="index.html"><img src="<%- url %>backend/images/logo.svg" alt="logo"/></a> -->
+                <a class="navbar-brand brand-logo text-white">Fruitable</a>
                 <a class="navbar-brand brand-logo-mini" href="index.html"><img src="<%- url %>backend/images/logo-mini.svg" alt="logo"/></a>
               </div>
               <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
@@ -122,49 +123,52 @@
                     <img src="<%- url %>backend/images/faces/face28.png">
                   </div>
                   <div class="user-name">
-                      Edward Spencer
+                    <%if(typeof user !== 'undefined'){%>
+                      <%- (user.username) %>
+                    <%}%>
                   </div>
                   <div class="user-designation">
-                      Developer
+                    <%if(typeof user !== 'undefined'){%>
+                      <%- user.email %>
+                    <%}%>
+                   
                   </div>
                 </div>
+                <script>
+                  let url = new URL(window.location.href)
+                </script>
                 <ul class="nav">
+                  
                   <li class="nav-item">
-                    <a class="nav-link" href="dashboard">
+                    <a class="nav-link" href="<%-url%>admin/dashboard">
                       <i class="icon-box menu-icon"></i>
                       <span class="menu-title">Dashboard</span>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="customer">
+                    <a class="nav-link" href="<%-url%>admin/customers">
                       <i class="icon-disc menu-icon"></i>
                       <span class="menu-title">Customer</span>
                     </a>
                   </li>
-                 <!--  <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                      <i class="icon-disc menu-icon"></i>
-                      <span class="menu-title">UI Elements</span>
-                      <i class="menu-arrow"></i>
-                    </a>
-                    <div class="collapse" id="ui-basic">
-                      <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
-                      </ul>
-                    </div>
-                  </li> -->
+               
              
                   <li class="nav-item">
-                    <a class="nav-link" href="products">
+                    <a class="nav-link" href="<%-url%>admin/products">
                       <i class="icon-command menu-icon"></i>
                       <span class="menu-title">Products</span>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="orders">
+                    <a class="nav-link" href="<%-url%>admin/orders">
                       <i class="icon-command menu-icon"></i>
                       <span class="menu-title">Orders</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="<%-url%>admin/brands">
+                      <i class="icon-command menu-icon"></i>
+                      <span class="menu-title">Brands</span>
                     </a>
                   </li>
                  

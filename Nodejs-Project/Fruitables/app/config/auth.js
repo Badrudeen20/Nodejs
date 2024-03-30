@@ -25,7 +25,7 @@ module.exports = {
       return next();
     }
     req.flash('error_msg', 'Please log in to view that resource');
-    res.redirect('/user/home');      
+    res.redirect('/home');      
   },
   adminForwardAuthenticated:async function(req, res, next) {
     const user = await req.user
