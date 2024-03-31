@@ -34,17 +34,17 @@
               <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text"  name="username" class="form-control" id="username" >
-                <p style="color: red;"><%=(typeof errors!='undefined' && typeof errors.username!='undefined' )? errors.username.msg:''%></p>
+                <p style="color: red;"><%=(typeof errors.form!='undefined' && typeof errors.form.username!='undefined' )? errors.form.username.msg:''%></p>
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
                 <input type="email"  name="email" class="form-control" id="email" aria-describedby="email">
-                <p style="color: red;"><%=(typeof errors!='undefined' && typeof errors.email!='undefined' )? errors.email.msg:''%></p>
+                <p style="color: red;"><%=(typeof errors.form!='undefined' && typeof errors.form.email!='undefined' )? errors.form.email.msg:''%></p>
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password"  name="password" class="form-control" id="password">
-                <p style="color: red;"><%=(typeof errors!='undefined' && typeof errors.password!='undefined' )? errors.password.msg:''%></p>
+                <p style="color: red;"><%=(typeof errors.form!='undefined' && typeof errors.form.password!='undefined' )? errors.form.password.msg:''%></p>
               </div>
 
             </div>
@@ -87,6 +87,7 @@
            
             <div class="modal-body" id="importUserField">
               <input type="file" name="file" required class="form-control" placeholder="Select excel sheet"/>
+              <p style="color: red;"><%=(typeof errors.file!='undefined')? errors.file:''%></p>
             </div>
             <div class="modal-footer">
               <a id="downloadExcelBtn" class="btn btn-primary float-left mb-2" download="sample.xlsx">Download Sample</a>
@@ -158,8 +159,11 @@
                  
                 });
         
-                <%if(typeof errors!='undefined'){%>
+                <%if(typeof errors.form!='undefined'){%>
                   $('#addUserModel').modal('show');
+                <%}%>
+                <%if(typeof errors.file!='undefined'){%>
+                  $('#importUserModel').modal('show');
                 <%}%>
             })
 

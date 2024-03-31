@@ -3,7 +3,7 @@ const multer = require('multer');
 const UserController = require('../app/controller/UserController');
 /* const FileController = require('../app/controller/FileController');
 const ClassController = require('../app/controller/ClassController'); */
-const { validate } = require('../app/helper/validation');
+const { validate,validateFile } = require('../app/helper/validation');
 
 const upload = multer({ dest: 'uploads/' })
 const router = express.Router()

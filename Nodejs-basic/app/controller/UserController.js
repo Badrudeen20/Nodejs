@@ -9,9 +9,14 @@ module.exports = {
     
     view:async function(req,res){ 
       const url = `https://${req.get('host')}${req.originalUrl}`;
-      const message = req.session.message;
+      const errors = {
+        form: req.session.message,
+        file:req.session.file
+      }
+      
       delete req.session.message; // Clear the message from the session
-      return res.render('user/index',{url:url,errors:message})
+      delete req.session.file; // Clear the file from the session
+      return res.render('user/index',{url:url,errors:errors})
     },
     list:async function(req,res){
       const page = req.query.start || 1;
@@ -50,7 +55,6 @@ module.exports = {
 
     addUser:async function(req,res){
       const { username, email,password } = req.body;
-      const url = `http://${req.get('host')}`;
       //validation
       const errors= validationResult(req);
       if(!errors.isEmpty()){
@@ -81,35 +85,55 @@ module.exports = {
       await user.destroy();
       return res.redirect('back');
     },
-    importUser:async function(req,res){
+    importUser:async function(req,res,next){
        
-      const workbook = xlsx.readFile(req.file.path);
-      const sheetName = workbook.SheetNames[0];
-      const sheetData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
-      const data = sheetData.filter(item=> {
-        if(item.username && item.email && item.password){
-          return item
-        }
-      })
-      const user = await db.Users.bulkCreate(data);
-
-      const rootDir = path.resolve(__dirname, '../..');
-      const folderPath = rootDir+"/uploads";
-      if (fs.existsSync(folderPath)) {
+      if (req.file && req.file.originalname) {
+         const allowedExtensions = ['.xlsx', '.xls']; // Add allowed extensions here
+         const fileExtension = req.file.originalname.substring(req.file.originalname.lastIndexOf('.')).toLowerCase();
         
-        const files = fs.readdirSync(folderPath);
-        for (const file of files) {
-            const curPath = path.join(folderPath, file);
-            if (fs.lstatSync(curPath).isFile()) {
-                fs.unlinkSync(curPath);
+        if(allowedExtensions.includes(fileExtension)) {
+                    
+          const workbook = xlsx.readFile(req.file.path);
+          const sheetName = workbook.SheetNames[0];
+          const sheetData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+          const data = sheetData.filter(item=> {
+            if(item.username && item.email && item.password){
+              return item
             }
+          })
+          const user = await db.Users.bulkCreate(data);
+    
+          const rootDir = path.resolve(__dirname, '../..');
+          const folderPath = rootDir+"/uploads";
+          if (fs.existsSync(folderPath)) {
+            
+            const files = fs.readdirSync(folderPath);
+            for (const file of files) {
+                const curPath = path.join(folderPath, file);
+                if (fs.lstatSync(curPath).isFile()) {
+                    fs.unlinkSync(curPath);
+                }
+            }
+            // fs.rmdirSync(folderPath); // Delete the folder itself
+            console.log(`Deleted folder: ${folderPath}`);
+          } else {
+              console.error(`Folder not found: ${folderPath}`);
+          }
+          res.redirect("back")
+
+        } else {
+          req.session.file= "Invalid File";
+          return res.redirect('/')
         }
-        // fs.rmdirSync(folderPath); // Delete the folder itself
-        console.log(`Deleted folder: ${folderPath}`);
-      } else {
-          console.error(`Folder not found: ${folderPath}`);
+
+      }else{
+        req.session.file= "Please Select File";
+        return res.redirect('/')
       }
-      res.redirect("back")
+
+
+
+      
     },
     downloadSample:async function(req,res){
       //const filePath = path.join(__dirname, 'public', req.url);
