@@ -1,9 +1,12 @@
 var express = require('express');
+/* 
 const cluster = require('node:cluster');
 const os = require('node:os')
-const numCPUs = require('node:os').availableParallelism()
+const numCPUs = require('node:os').availableParallelism() 
+*/
 var app = express();
 let PORT = process.env.PORT || 9000;
+const session = require('express-session');
 const web = require('./routes/web')
 require('dotenv').config()
 require('./app/models')
@@ -13,14 +16,21 @@ require('./app/models')
 app.set('views',__dirname + '/view')
 app.set('view engine','ejs') 
 
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 app.use(web)
-
+app.listen( PORT, function() {
+  console.log( 'server running on ' + PORT );
+});
 
 /* Cluster */
-if (cluster.isPrimary) {
+/* if (cluster.isPrimary) {
    console.log(`Primary ${process.pid} is running`);
  
    // Fork workers.
@@ -36,7 +46,7 @@ if (cluster.isPrimary) {
       console.log( 'server running on ' + PORT );
    });
    console.log(`Worker ${process.pid} started`);
- }
+} */
 
 
 

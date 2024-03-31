@@ -33,15 +33,18 @@
             <div class="modal-body">
               <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" id="username" >
+                <input type="text"  name="username" class="form-control" id="username" >
+                <p style="color: red;"><%=(typeof errors!='undefined' && typeof errors.username!='undefined' )? errors.username.msg:''%></p>
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" name="email" class="form-control" id="email" aria-describedby="email">
+                <input type="email"  name="email" class="form-control" id="email" aria-describedby="email">
+                <p style="color: red;"><%=(typeof errors!='undefined' && typeof errors.email!='undefined' )? errors.email.msg:''%></p>
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" id="password">
+                <input type="password"  name="password" class="form-control" id="password">
+                <p style="color: red;"><%=(typeof errors!='undefined' && typeof errors.password!='undefined' )? errors.password.msg:''%></p>
               </div>
 
             </div>
@@ -72,6 +75,29 @@
       </div>
       <!-- Edit User Modal -->
 
+
+      <!-- Import User Modal -->
+      <div class="modal fade" id="importUserModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <form class="modal-content" method="post" action="/import" enctype="multipart/form-data">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="importUserModelLabel">Update User</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+           
+            <div class="modal-body" id="importUserField">
+              <input type="file" name="file" required class="form-control" placeholder="Select excel sheet"/>
+            </div>
+            <div class="modal-footer">
+              <a id="downloadExcelBtn" class="btn btn-primary float-left mb-2" download="sample.xlsx">Download Sample</a>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- Import User Modal -->
+
       
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
@@ -80,9 +106,10 @@
       <script src="https://cdn.datatables.net/buttons/3.0.0/js/dataTables.buttons.js"></script>
       <script src="https://cdn.datatables.net/2.0.0/js/dataTables.bootstrap5.js"></script>
       <script>
+           
             $(document).ready( function () {
                 var pgno = 0;
-                let pageLength = 3
+                let pageLength = 5
                 $('table.display').DataTable({
                   "processing" : true,
                   "serverSide" : true,
@@ -96,6 +123,10 @@
                                   // action: function (e, dt, node, config) {
                                   //     alert('Button activated');
                                   // }
+                              },
+                              {
+                                text: 'Import User',
+                                attr: {'class': 'btn btn-info text-light','data-bs-toggle':'modal','data-bs-target':'#importUserModel' },
                               }
                           ]
                       }
@@ -115,7 +146,7 @@
                              json["recordsTotal"] = 40
                              callback(json);
                         });
-                    },
+                  },
                     // pageLength: 10,
                     columns: [
                         { data: "id" },
@@ -125,10 +156,11 @@
                         
                     ],
                  
-                
-                
-            });
+                });
         
+                <%if(typeof errors!='undefined'){%>
+                  $('#addUserModel').modal('show');
+                <%}%>
             })
 
           function editUser(userId){
@@ -140,16 +172,35 @@
                 const html = `<input type="hidden" name="id" value="${userId}">
                               <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
-                                <input type="text" name="username" class="form-control"  value="${json.username}">
+                                <input type="text" required name="username" class="form-control"  value="${json.username}">
                               </div>
                               <div class="mb-3">
-                                <label for="email" class="form-label">Email address</label>
+                                <label for="email" required class="form-label">Email address</label>
                                 <input type="email" name="email" class="form-control"  value="${json.email}" aria-describedby="email">
                               </div>`
                 $('#editUserField').html(html)
                 $('#editUserModel').modal('show');
             });
           }
+          const excelBtn = $('#downloadExcelBtn')
+  
+          // Example usage
+          function downloadFile() {
+            const filename = 'sample.xlsx';
+            const url = '<%=url%>downloadSample'; // Change the URL accordingly
+            
+            fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const link = document.createElement('a');
+                    excelBtn.attr("href",URL.createObjectURL(blob))
+                    // link.href = URL.createObjectURL(blob);
+                    // link.download = filename;
+                    // link.click();
+                })
+                .catch(error => console.error('Error downloading file:', error));
+          }
+          downloadFile()
         </script>
 </body>
 

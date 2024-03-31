@@ -4,7 +4,6 @@ const rootDir = path.resolve(__dirname, '../..');
 module.exports = {
     
     view:async function(req,res){ 
-      
       const filePath = path.join(rootDir, 'data', 'test.txt');
       /* const data = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' }); */
       const data = ""
