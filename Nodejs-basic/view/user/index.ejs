@@ -33,17 +33,17 @@
             <div class="modal-body">
               <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text"  name="username" class="form-control" id="username" >
+                <input type="text" required name="username" class="form-control" id="username" >
                 <p style="color: red;"><%=(typeof errors.form!='undefined' && typeof errors.form.username!='undefined' )? errors.form.username.msg:''%></p>
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email"  name="email" class="form-control" id="email" aria-describedby="email">
+                <input type="email" required name="email" class="form-control" id="email" aria-describedby="email">
                 <p style="color: red;"><%=(typeof errors.form!='undefined' && typeof errors.form.email!='undefined' )? errors.form.email.msg:''%></p>
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password"  name="password" class="form-control" id="password">
+                <input type="password" required  name="password" class="form-control" id="password">
                 <p style="color: red;"><%=(typeof errors.form!='undefined' && typeof errors.form.password!='undefined' )? errors.form.password.msg:''%></p>
               </div>
 
