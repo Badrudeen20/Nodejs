@@ -101,7 +101,7 @@ module.exports = {
         })
         
         if(existFileName.image!==filename){
-            if(req.files.img){
+            if(req.files){
               const file = req.files.img
     
               // Check if the file is an image
@@ -161,9 +161,8 @@ module.exports = {
         })
       }else{
 
-        if(req.files.img){
+        if(req.files){
           const file = req.files.img
-
           // Check if the file is an image
           if (!file.mimetype.startsWith('image/')) {
             return res.status(400).send('Only images are allowed.');

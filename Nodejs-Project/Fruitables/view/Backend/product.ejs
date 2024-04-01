@@ -65,19 +65,19 @@
                           "serverSide" : true,
                           "lengthChange": false,
                           pageLength : pageLength,
+           
                           ajax: function (data, callback, settings) {
                                 var api = this.api();
                                 var search = api.search() 
                                 var pageInfo = api.page.info();
                                 pgno = pageInfo.page+1;
-  
                                 $.ajax({
                                       url: "<%=url%>admin/products/list",
                                       method:"GET",
                                       data:{start:pgno, length:pageLength,search:search}
                                 }).then ( function( json, textStatus, jqXHR ) {
                                       json["data"] = json["data"];
-                                      json["recordsTotal"] = 40
+                                      // json["recordsTotal"] = 40
                                       callback(json);
                                 });
                           },
@@ -89,6 +89,13 @@
                           { data: "status" }, 
                           { data: "action" },   
                           ],
+                          "drawCallback": function (settings) {
+                              var api = this.api();
+                              if (api.rows({ page: 'current' }).count() === 0) {
+                                  $(api.table().body()).append('<tr><td colspan="5" class="text-center">No records available</td></tr>');
+                              }
+                          },
+                         
                     })
                     
                    

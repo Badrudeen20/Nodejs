@@ -1,49 +1,41 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
+
 model User {
   id        Int      @id @default(autoincrement())
-  username  String   @unique @db.VarChar(150)
-  email     String   @unique @db.VarChar(150)
-  password  String   @db.VarChar(150)
-  role      String   @db.VarChar(150)
+  username  String   @unique 
+  email     String   @unique 
+  password  String   
+  role      String   
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   orders    Order[]
   shops     Shop[]
   @@map("users")
 }
-enum BrandStatus {
-  ACTIVE
-  INACTIVE
-}
+
 
 model Brand {
   id           Int      @id @default(autoincrement())
-  name         String    @db.VarChar(150)
-  status       BrandStatus      @default(ACTIVE) 
+  name         String    
+  status       String   @default("ACTIVE") 
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
   products     Product[]
   @@map("bands")
 }
 
-enum ProductStatus {
-  ACTIVE
-  INACTIVE
-}
+
 
 model Product {
   id             Int            @id @default(autoincrement())
@@ -51,9 +43,9 @@ model Product {
   search         String
   price          Float
   rating         Int            @default(0)
-  status         ProductStatus  @default(ACTIVE)
+  status         String         @default("ACTIVE")
   image          String?
-  description    String?        @db.Text
+  description    String?        
   createdAt      DateTime       @default(now()) @map("created_at")
   updatedAt      DateTime       @updatedAt @map("updated_at")
   brand          Brand          @relation(fields: [brandId], references: [id])
@@ -67,51 +59,42 @@ model Category {
   id          Int        @id @default(autoincrement())
   product     Product    @relation(fields: [productId], references: [id])
   productId   Int        @map("product_id") 
-  additional  String     @db.VarChar(150)
+  additional  String     
   createdAt   DateTime   @default(now()) @map("created_at")
   updatedAt   DateTime   @updatedAt @map("updated_at")
   @@map("categories")
 }
 
 
-enum Status {
-     CART
-     SHOP
-}
+
 
 model Order {
   id           Int      @id @default(autoincrement())
   user         User     @relation(fields: [userId], references: [id])
   userId       Int      @map("user_id")
-  cartId       String?  @db.Text 
+  cartId       String?  
   product      Product  @relation(fields: [productId], references: [id])
   productId    Int      @map("product_id")
-  price        Float    @db.Float 
-  discount     Float    @db.Float @default(0)
+  price        Float    
+  discount     Float    @default(0)
   quantity     Int      @default(1)
-  status       Status   @default(CART)
+  status       String   @default("CART")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
   @@map("orders")
 }
 
 
-enum ShopStatus {
-     PAYMADE
-     PAYINPROGRESS
-     PAYCANCLE
-     PAYDONE
 
-}
 
 model Shop {
   id           Int      @id @default(autoincrement())
   user         User     @relation(fields: [userId], references: [id])
   userId       Int      @map("user_id")
-  cartId       String   @db.Text 
-  price        Float    @db.Float 
-  discount     Float    @db.Float @default(0)
-  status       ShopStatus   @default(PAYMADE)
+  cartId       String   
+  price        Float     
+  discount     Float    @default(0)
+  status       String   @default("PAYMADE")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
   @@map("shops")
@@ -119,17 +102,13 @@ model Shop {
 
 
 
-enum CouponStatus {
-   ACTIVE
-   INACTIVE
-}
 
 model Coupon {
   id           Int      @id @default(autoincrement())
   code         String   @unique
-  discount     Float    @db.Float @default(0)
+  discount     Float    @default(0)
   validity     DateTime?
-  status       CouponStatus   @default(ACTIVE)
+  status       String   @default("ACTIVE")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
   @@map("coupons")

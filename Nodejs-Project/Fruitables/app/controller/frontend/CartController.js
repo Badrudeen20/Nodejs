@@ -11,6 +11,7 @@ module.exports = {
         include:{product:true},
         where: {
           userId: user.id,
+          status:'CART'
         }
       })
       return res.render('frontend/cart',{
@@ -94,6 +95,7 @@ module.exports = {
         include:{product:true},
         where: {
           userId: user.id,
+          status:'CART'
         }
       })
       return res.render('frontend/checkout',{
@@ -136,7 +138,7 @@ module.exports = {
         const shop = await prisma.shop.create({
           data: {
             userId:userData.id,
-            price:order.reduce((acc,cur,ind,arr)=>{ return acc += cur.price},0),
+            price:order.reduce((acc,cur,ind,arr)=>{ return acc += cur.price * cur.quantity},0),
             discount:order.reduce((acc,cur,ind,arr)=>{ return acc += cur.discount},0),
             cartId:cartId.toString()
           },

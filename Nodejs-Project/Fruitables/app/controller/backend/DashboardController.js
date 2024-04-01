@@ -6,7 +6,7 @@ module.exports = {
     
   view:async function(req,res){
     const item = {}
-    item.order = await prisma.product.count()
+    item.order = await prisma.shop.count()
     item.customer = await prisma.user.count({
       where:{
         role:'user'

@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+require('dotenv').config()
 const path = require('path');
 let PORT = process.env.PORT || 5000;
 const expressLayouts = require('express-ejs-layouts');
@@ -22,7 +23,7 @@ app.use(express.urlencoded({extended:true}))
 // Express session
 app.use(
       session({
-        secret: 'secret',
+        secret: process.env.PORT || 'secret',
         resave: true,
         saveUninitialized: true
       })
