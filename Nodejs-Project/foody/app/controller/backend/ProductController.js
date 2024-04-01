@@ -89,9 +89,6 @@ module.exports = {
    
       let {name,brand,price,additional,search,status,img,desc,filename} = req.body
       
-     
-      
-     
       if(req.body.id){
       
         const existFileName = await prisma.product.findUnique({
