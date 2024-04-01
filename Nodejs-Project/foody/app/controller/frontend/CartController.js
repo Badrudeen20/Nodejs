@@ -14,7 +14,7 @@ module.exports = {
           status:'CART'
         }
       })
-      return res.render('frontend/cart',{
+      return res.render('Frontend/cart',{
         layout: 'Frontend/layout',
         url:url(req,res),
         user:user,
@@ -98,7 +98,7 @@ module.exports = {
           status:'CART'
         }
       })
-      return res.render('frontend/checkout',{
+      return res.render('Frontend/checkout',{
         layout: 'Frontend/layout',
         url:url(req,res),
         user:user,
@@ -144,7 +144,7 @@ module.exports = {
           },
         });
         
-        return res.render('frontend/success',{
+        return res.render('Frontend/success',{
           layout: 'Frontend/layout',
           url:url(req,res),
           user: userData,

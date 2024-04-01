@@ -102,7 +102,7 @@ module.exports = {
       const totalItems = productId.length; // Total number of items
       const totalPages = Math.ceil(totalItems / pageSize); // Calculate the total number of pages
      
-      return res.render('frontend/shop',{
+      return res.render('Frontend/shop',{
        layout: 'Frontend/layout',
        url:url(req,res),
        brand:brands,
@@ -131,7 +131,7 @@ module.exports = {
       }
      })
      
-     return res.render('frontend/shop-detail',{
+     return res.render('Frontend/shop-detail',{
       layout: 'Frontend/layout',
       url:url(req,res),
       user:user,
