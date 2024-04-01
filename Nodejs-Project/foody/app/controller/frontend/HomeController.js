@@ -22,7 +22,7 @@ module.exports = {
         take: 8,
       })
         
-      return res.render('frontend/index',{
+      return res.render('Frontend/index',{
         layout: 'Frontend/layout',
         url:url(req,res),
         brand:brands,
@@ -32,7 +32,7 @@ module.exports = {
     },
     contact:async function(req,res){
         const user = await req.user
-        return res.render('frontend/contact',{layout: 'Frontend/layout',url:url(req,res),user:user})
+        return res.render('Frontend/contact',{layout: 'Frontend/layout',url:url(req,res),user:user})
     }
   
 }
