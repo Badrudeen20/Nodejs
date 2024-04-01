@@ -23,7 +23,7 @@ app.use(express.urlencoded({extended:true}))
 // Express session
 app.use(
       session({
-        secret: process.env.PORT || 'secret',
+        secret: process.env.SECRET || 'secret',
         resave: true,
         saveUninitialized: true
       })
