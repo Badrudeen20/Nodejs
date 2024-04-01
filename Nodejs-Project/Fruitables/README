@@ -1,3 +1,0 @@
-npx prisma init
-npx prisma migrate dev --name create-user-table
-npx prisma migrate deploy
