@@ -98,7 +98,11 @@
                                                 value="0" 
                                             <%}%>
                                             max="500" min="0" oninput="amount.value=rangeInput.value">
-                                            <output id="amount" name="amount" min-velue="0" max-value="500" for="rangeInput">0</output>
+                                            <output id="amount" name="amount" min-velue="0" max-value="500" for="rangeInput" >
+                                                <% if(query.price){ %>
+                                                    <%-query.price%>
+                                                <% }%>
+                                            </output>
                                         </div>
                                     </div>
                                     <% filter.forEach((item,index)=>{%>
@@ -203,7 +207,8 @@
                                         <div class="col-md-6 col-lg-6 col-xl-4">
                                             <div class="rounded position-relative fruite-item">
                                                 <div class="fruite-img">
-                                                    <img src="<%- url %>assets/img/fruite-item-5.jpg" class="img-fluid w-100 rounded-top" alt="">
+                                                    <!-- <img src="<%- url %>assets/img/fruite-item-5.jpg" class="img-fluid w-100 rounded-top" alt=""> -->
+                                                    <img src="<%- url %>upload/<%=item.image%>" class="img-fluid w-100 rounded-top" alt="">
                                                 </div>
                                                 <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Fruits</div>
                                                 <div class="p-4 border border-secondary border-top-0 rounded-bottom">
@@ -223,10 +228,49 @@
                                     
 
 
+                                    <script>
+                                        const params = <%- JSON.stringify(query) %>;
+                                        let queryString = '';
+                                        for (const key in params) {
+                                            if (Array.isArray(params[key])) {
+                                                params[key].forEach(value => {
+                                                    queryString += `${key}[]=${encodeURIComponent(value)}&`;
+                                                });
+                                            } else {
+                                                queryString += `${key}=${encodeURIComponent(params[key])}&`;
+                                            }
+                                        }
 
+                                        const search = `shop?${queryString.slice(0, -1)}`;
+                                    </script>
+
+                                    <%
+                                    
+                                    const params = query;
+
+                                    let queryString = '';
+                                    for (const key in params) {
+                                        if(key=='page') continue
+                                        
+                                        if (Array.isArray(params[key])) {
+                                            params[key].forEach(value => {
+                                                queryString += `${key}[]=${encodeURIComponent(value)}&`;
+                                            });
+                                        } else {
+                                            queryString += `${key}=${encodeURIComponent(params[key])}&`;
+                                        }
+                                    }
+
+                                    // Remove the trailing '&' character
+                                    queryString = queryString.slice(0, -1);
+
+                                    let search = (queryString)?'&'+queryString :'';
+
+                                    %>
+                                    
                                     <div class="col-12">
                                         <div class="pagination d-flex justify-content-center mt-5">
-                                            <a href="<%-url%>shop?page=<%-(+pageNumber-1)%>" class="rounded" 
+                                            <a href="<%-url%>shop?page=<%-(+pageNumber-1)%><%-search%>" class="rounded" 
                                             <%if(pageNumber==1){%>
                                                 style="pointer-events: none;"
                                             <%}%>
@@ -234,40 +278,40 @@
                                             <% const list = +page %>
                                             <%for(let i=1;i <= list; i++){  %>
                                                 <%if(list <= 6){%>
-                                                    <a href="<%-url%>shop?page=<%-i%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
+                                                    <a href="<%-url%>shop?page=<%-i%><%-search%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
                                                 <%}else if(+pageNumber >= 1 && +pageNumber <= 4){%>
                                                     <%if(i <= 4){%>
-                                                        <a href="<%-url%>shop?page=<%-i%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
+                                                        <a href="<%-url%>shop?page=<%-i%><%-search%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
                                                     <%}%>
                                                     <%if(i == list){%>
                                                         <a class="rounded"  style="pointer-events: none;">...</a>
-                                                        <a href="<%-url%>shop?page=<%-i%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
+                                                        <a href="<%-url%>shop?page=<%-i%><%-search%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
                                                     <%}%>
                                                 <%}else if(+pageNumber >= 5 && +pageNumber < list-2){%>
                                                     <%if(i == 1){%>
-                                                        <a href="<%-url%>shop?page=<%-i%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
+                                                        <a href="<%-url%>shop?page=<%-i%><%-search%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
                                                         <a class="rounded"  style="pointer-events: none;">...</a>
                                                     <%}%>
                                                     <%if(i >= (pageNumber-1) && i <= (+pageNumber+1)){ %>
-                                                        <a href="<%-url%>shop?page=<%-i%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
+                                                        <a href="<%-url%>shop?page=<%-i%><%-search%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
                                                     <%}%>
                                                     <%if(i == list){%>
                                                         <a class="rounded"  style="pointer-events: none;">...</a>
-                                                        <a href="<%-url%>shop?page=<%-i%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
+                                                        <a href="<%-url%>shop?page=<%-i%><%-search%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
                                                     <%}%>
                                                 <%}else if(+pageNumber > list-3){%>
                                                     <%if(i == 1){%>
-                                                        <a href="<%-url%>shop?page=<%-i%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
+                                                        <a href="<%-url%>shop?page=<%-i%><%-search%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
                                                         <a class="rounded"  style="pointer-events: none;">...</a>
                                                     <%}%>
                                                     <%if(i > list-5){%>
-                                                        <a href="<%-url%>shop?page=<%-i%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
+                                                        <a href="<%-url%>shop?page=<%-i%><%-search%>" class="<%-(pageNumber==i)?'active':''%> rounded"><%-i%></a>
                                                     <%}%>
                                                 <%}%>
                                                
                                             <% } %>
                                         
-                                            <a href="<%-url%>shop?page=<%-(+pageNumber+1)%>" 
+                                            <a href="<%-url%>shop?page=<%-(+pageNumber+1)%><%-search%>" 
                                                 <%if(pageNumber==page){%>
                                                     style="pointer-events: none;"
                                                 <%}%>

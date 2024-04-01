@@ -123,12 +123,12 @@
                     <img src="<%- url %>backend/images/faces/face28.png">
                   </div>
                   <div class="user-name">
-                    <%if(typeof user !== 'undefined'){%>
+                    <%if(typeof user !== 'undefined' && user.role=='admin'){%>
                       <%- (user.username) %>
                     <%}%>
                   </div>
                   <div class="user-designation">
-                    <%if(typeof user !== 'undefined'){%>
+                    <%if(typeof user !== 'undefined' && user.role=='admin'){%>
                       <%- user.email %>
                     <%}%>
                    

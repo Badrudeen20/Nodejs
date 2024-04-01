@@ -22,13 +22,14 @@
                             <div class="col-lg-5">
                                 <div class="border rounded">
                                     <a href="#">
-                                        <img src="<%- url %>assets/img/single-item.jpg" class="img-fluid rounded" alt="Image">
+                                        <!-- <img src="<%- url %>assets/img/single-item.jpg" class="img-fluid rounded" alt="Image"> -->
+                                        <img src="<%- url %>upload/<%-product.image%>" class="img-fluid rounded" alt="Image">
                                     </a>
                                 </div>
                             </div>
                             <form action="<%-url%>addCart/<%-product.id%>" method="post" class="col-lg-7">
                                 <h4 class="fw-bold mb-3"><%-product.name%></h4>
-                                <p class="mb-3">Category: Vegetables</p>
+                                <p class="mb-3">Category: <%-product.categories[0].additional%></p>
                                 <h5 class="fw-bold mb-3"><%-product.price%> $</h5>
                                 <div class="d-flex mb-4">
                                     <i class="fa fa-star text-secondary"></i>

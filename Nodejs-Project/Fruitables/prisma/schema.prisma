@@ -22,6 +22,7 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   orders    Order[]
+  shops     Shop[]
   @@map("users")
 }
 enum BrandStatus {
@@ -75,18 +76,14 @@ model Category {
 
 enum Status {
      CART
-     CHECKOUT
-     PAYMADE
-     PAYINPROGRESS
-     PAYCANCLE
-     PAYDONE
-
+     SHOP
 }
 
 model Order {
   id           Int      @id @default(autoincrement())
   user         User     @relation(fields: [userId], references: [id])
   userId       Int      @map("user_id")
+  cartId       String?  @db.Text 
   product      Product  @relation(fields: [productId], references: [id])
   productId    Int      @map("product_id")
   price        Float    @db.Float 
@@ -97,6 +94,30 @@ model Order {
   updatedAt    DateTime @updatedAt @map("updated_at")
   @@map("orders")
 }
+
+
+enum ShopStatus {
+     PAYMADE
+     PAYINPROGRESS
+     PAYCANCLE
+     PAYDONE
+
+}
+
+model Shop {
+  id           Int      @id @default(autoincrement())
+  user         User     @relation(fields: [userId], references: [id])
+  userId       Int      @map("user_id")
+  cartId       String   @db.Text 
+  price        Float    @db.Float 
+  discount     Float    @db.Float @default(0)
+  status       ShopStatus   @default(PAYMADE)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  @@map("shops")
+}
+
+
 
 enum CouponStatus {
    ACTIVE

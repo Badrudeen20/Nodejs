@@ -78,6 +78,7 @@ router.post('/coupon',userEnsureAuthenticated,CartController.coupon);
 router.all('/addCart/:id',userEnsureAuthenticated,CartController.addCart);
 router.get('/checkout',userEnsureAuthenticated,CartController.checkout);
 router.get('/delete/:id',userEnsureAuthenticated,CartController.delete);
+router.post('/success',userEnsureAuthenticated,CartController.success);
 router.get('/logout',userEnsureAuthenticated,function(req,res){
       req.logout(function(err){
             if (err) {

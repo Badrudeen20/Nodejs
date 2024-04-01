@@ -113,10 +113,13 @@ module.exports = {
               }
     
               // Remove existing image file if it exists
-              const fileExist = path.join(rootDir, existFileName.image);
-              if(fs.existsSync(fileExist)) {
-                  fs.unlinkSync(fileExist);
+              if(existFileName.image){
+                const fileExist = path.join(rootDir, existFileName.image);
+                if(fs.existsSync(fileExist)) {
+                    fs.unlinkSync(fileExist);
+                }
               }
+              
     
               filename = generateRandomId()+file.name
               const filePath = path.join(rootDir, filename);

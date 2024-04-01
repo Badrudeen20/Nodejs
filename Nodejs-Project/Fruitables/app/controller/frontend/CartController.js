@@ -2,11 +2,13 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const passport = require('passport');
 const { url } = require('../../helper/url');
+const { user } = require('../../helper/user');
 module.exports = {
    
     cart:async function(req,res){
       const user = await req.user
       const order = await prisma.order.findMany({
+        include:{product:true},
         where: {
           userId: user.id,
         }
@@ -34,7 +36,7 @@ module.exports = {
           userId: user.id,
           price:product.price,
           status:'CART',
-          quantity:parseInt(quantity) || 0
+          quantity:parseInt(quantity) || 1
         },
       });
       return res.redirect('back')
@@ -71,6 +73,7 @@ module.exports = {
 
       // Update each fetched record with the new data
       const updatedRecords = await Promise.all(
+        
         orders.map(async (record) => {
           // Update the record with the new data
           const updatedRecord = await prisma.order.update({
@@ -88,6 +91,7 @@ module.exports = {
     checkout:async function(req,res){
       const user = await req.user
       const order = await prisma.order.findMany({
+        include:{product:true},
         where: {
           userId: user.id,
         }
@@ -106,6 +110,47 @@ module.exports = {
         },
       })
       return res.redirect('back')
+    },
+    success:async function(req,res){
+      const userData = await user(req,res)
+      const order = await prisma.order.findMany({
+        where:{
+          userId:userData.id,
+          status:'CART'
+        }
+      })
+     
+      if(order.length > 0){
+        const cartId = Math.floor(Math.random()*1000000000)
+        for (const record of order) {
+          const updateOrder = await prisma.order.update({
+            where:{
+               id:+record.id
+            },
+            data: {
+              cartId:cartId.toString(),
+              status:'SHOP'
+            },
+          });
+        }
+        const shop = await prisma.shop.create({
+          data: {
+            userId:userData.id,
+            price:order.reduce((acc,cur,ind,arr)=>{ return acc += cur.price},0),
+            discount:order.reduce((acc,cur,ind,arr)=>{ return acc += cur.discount},0),
+            cartId:cartId.toString()
+          },
+        });
+        
+        return res.render('frontend/success',{
+          layout: 'Frontend/layout',
+          url:url(req,res),
+          user: userData,
+        })
+      }else{
+        return res.redirect('back')
+      }
+      
     }
   
 }

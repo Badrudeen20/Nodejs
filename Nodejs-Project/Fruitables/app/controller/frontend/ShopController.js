@@ -7,6 +7,7 @@ module.exports = {
     shop:async function(req,res){
       const user = await req.user
       const query = req.query
+     
       const brands = await prisma.brand.findMany({
         where: {
           status: 'ACTIVE',
@@ -22,6 +23,7 @@ module.exports = {
       let product = await prisma.product.findMany({
         select: {
           id: true,
+          price:true
         },
         where: {
           status: 'ACTIVE',
@@ -43,8 +45,6 @@ module.exports = {
         }
       })
       
-     
-
       const categories = await prisma.category.findMany({
         where: {
           productId: {
@@ -89,7 +89,7 @@ module.exports = {
       const pageNumber = query.page || 1; // Specify the page number
       const pageSize = 6; // Specify the number of items per page
       const skip = (pageNumber - 1) * pageSize; // Calculate the number of items to skip
-     
+   
       const list = await prisma.product.findMany({
           where:{
             id:{
@@ -111,7 +111,7 @@ module.exports = {
        product:list,
        page:totalPages,
        pageNumber:pageNumber,
-       user:user
+       user:user,
       })
     },
     detail:async function(req,res){
@@ -119,10 +119,12 @@ module.exports = {
      const user = await req.user
      const productId = req.params.id
      let product = await prisma.product.findUnique({
+        include:{categories:true},
         where:{
           id:parseInt(productId)
         }
      })
+    
      const categories = await prisma.category.findMany({
       where: {
         productId: parseInt(productId),

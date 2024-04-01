@@ -17,14 +17,9 @@ module.exports = {
     const pageSize = req.query.length || 10; // Default page size
     const offset = (page - 1) * pageSize;
     const search = req.query.search || '';
-    const totalCount = await prisma.order.count()
-    const searchCount = await prisma.order.count({
+    const totalCount = await prisma.shop.count()
+    const searchCount = await prisma.shop.count({
       where: {
-        product: {
-          name: {
-            contains: search || '' // or use 'startsWith' for searching by prefix
-          },
-        },
         user: {
           username: {
             contains: search || '' // or use 'startsWith' for searching by prefix
@@ -33,16 +28,11 @@ module.exports = {
       }
     });
 
-    let data = await prisma.order.findMany({
+    let shop = await prisma.shop.findMany({
           take: +pageSize,
           skip: +offset,
-          include: { product: true,user:true},
+          include: { user:true},
           where: {
-            product: {
-              name: {
-                contains: search || '' // or use 'startsWith' for searching by prefix
-              }
-            },
             user: {
               username: {
                 contains: search || '' // or use 'startsWith' for searching by prefix
@@ -52,11 +42,27 @@ module.exports = {
     
     });  
 
-    data = data.map(item=>{
+    const product = await prisma.order.findMany({
+      select: {
+        product: true,
+        cartId:true
+      },
+      where:{
+        cartId:{
+          in: shop.map(item=>item.cartId)
+        },
+        status:'SHOP'
+      }
+    })
+   
+    
+
+    shop = shop.map(item=>{
+      
       return  {
         id:item.id,
         user:item.user.username,
-        product:item.product.name,
+        product:product.filter(i=>(item.cartId==i.cartId)).map(i=>i.product.name).join(","),
         price:item.price,
         date:item.createdAt
       }
@@ -66,7 +72,7 @@ module.exports = {
           success: true,
           iTotalRecords: totalCount || 0,
           iTotalDisplayRecords: searchCount || 0,
-          aaData : data || []
+          aaData : shop || []
     })
 
   },
