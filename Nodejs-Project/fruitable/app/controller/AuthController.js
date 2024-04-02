@@ -34,7 +34,6 @@ module.exports = {
       }
     },
     register:async function(req,res){
-      
       if (req.method === 'GET') {
             return res.render('Auth/register',{layout: 'Auth/layout',url:url(req,res)})
       } else if (req.method === 'POST') {

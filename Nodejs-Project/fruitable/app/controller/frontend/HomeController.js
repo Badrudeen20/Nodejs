@@ -2,6 +2,8 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const passport = require('passport');
 const { url } = require('../../helper/url');
+const { user } = require('../../helper/user');
+
 module.exports = {
   
     home:async function(req,res){
@@ -11,7 +13,7 @@ module.exports = {
             }
       })
      
-      const user = await req.user
+      
       const products = await prisma.product.findMany({
         where: {
           status: 'ACTIVE',
@@ -27,12 +29,16 @@ module.exports = {
         url:url(req,res),
         brand:brands,
         products:products,
-        user:user
+        user:await user(req,res)
       })
     },
     contact:async function(req,res){
-        const user = await req.user
-        return res.render('Frontend/contact',{layout: 'Frontend/layout',url:url(req,res),user:user})
+        
+        return res.render('Frontend/contact',{
+          layout: 'Frontend/layout',
+          url:url(req,res),
+          user:await user(req,res)
+        })
     }
   
 }

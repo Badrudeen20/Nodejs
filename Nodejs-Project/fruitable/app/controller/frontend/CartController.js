@@ -6,23 +6,23 @@ const { user } = require('../../helper/user');
 module.exports = {
    
     cart:async function(req,res){
-      const user = await req.user
+      const userDetail = await user(req,res)
       const order = await prisma.order.findMany({
         include:{product:true},
         where: {
-          userId: user.id,
+          userId: userDetail.id,
           status:'CART'
         }
       })
       return res.render('Frontend/cart',{
         layout: 'Frontend/layout',
         url:url(req,res),
-        user:user,
+        user:userDetail,
         order:order
       })
     },
     addCart:async function(req,res){
-      const user = await req.user
+      const userDetail = await user(req,res)
       const product = await prisma.product.findUnique({
         where: {
           id:parseInt(req.params.id),
@@ -34,7 +34,7 @@ module.exports = {
       const order = await prisma.order.create({
         data: {
           productId: product.id,
-          userId: user.id,
+          userId: userDetail.id,
           price:product.price,
           status:'CART',
           quantity:parseInt(quantity) || 1

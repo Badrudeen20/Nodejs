@@ -2,12 +2,13 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const passport = require('passport');
 const { url } = require('../../helper/url');
+const { user } = require('../../helper/user');
+
 module.exports = {
   
     shop:async function(req,res){
-      const user = await req.user
-      const query = req.query
      
+      const query = req.query
       const brands = await prisma.brand.findMany({
         where: {
           status: 'ACTIVE',
@@ -111,12 +112,12 @@ module.exports = {
        product:list,
        page:totalPages,
        pageNumber:pageNumber,
-       user:user,
+       user:await user(req,res),
       })
     },
     detail:async function(req,res){
     
-     const user = await req.user
+    //  const user = await req.user
      const productId = req.params.id
      let product = await prisma.product.findUnique({
         include:{categories:true},
@@ -134,7 +135,7 @@ module.exports = {
      return res.render('Frontend/shop-detail',{
       layout: 'Frontend/layout',
       url:url(req,res),
-      user:user,
+      user:await user(req,res),
       product:product,
       categories:categories
       })
