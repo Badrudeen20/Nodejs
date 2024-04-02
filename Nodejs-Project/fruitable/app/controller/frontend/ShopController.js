@@ -87,7 +87,7 @@ module.exports = {
       }
 
       const pageNumber = query.page || 1; // Specify the page number
-      const pageSize = 6; // Specify the number of items per page
+      const pageSize = 3; // Specify the number of items per page
       const skip = (pageNumber - 1) * pageSize; // Calculate the number of items to skip
    
       const list = await prisma.product.findMany({
