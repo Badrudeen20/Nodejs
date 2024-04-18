@@ -86,7 +86,7 @@
             </div>
            
             <div class="modal-body" id="importUserField">
-              <input type="file" name="file" required class="form-control" placeholder="Select excel sheet"/>
+              <input type="file" name="file" required class="form-control" accept=".xlsx" placeholder="Select excel sheet"/>
               <p style="color: red;"><%=(typeof errors.file!='undefined')? errors.file:''%></p>
             </div>
             <div class="modal-footer">

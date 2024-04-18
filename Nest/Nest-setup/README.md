@@ -1,0 +1,1 @@
+# npm install @prisma/cli @prisma/client sqlite3 @nestjs/typeorm
