@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+      <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+      <div class="container">
+            <div class="row">
+                  <div class="col-md-5">
+                  <div class="ibox float-e-margins">
+                        <div class="ibox-content">
+                              <div class="file-manager">
+                              <div class="d-flex  w-100 justify-content-between align-items-center">
+                                    <h5>File Manager:</h5>
+                                    <span style="cursor:pointer" data-toggle="modal" data-target="#folder">
+                                          <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                    </span>
+                              </div>
+                        
+            
+                              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    
+                                    <% categories.forEach((ele,index)=>{%>
+                                          <li class="nav-item" >
+                                          <a class="nav-link <% if(index == 0){ %> active <% } %>" id="<%= ele.name %>-tab" data-toggle="tab" href="#<%= ele.name %>" role="tab" aria-controls="<%= ele.name %>" aria-selected="true"><%= ele.name %></a>
+                                          </li>      
+                                    <% }) %>   
+                  
+                              </ul>
+                              <div class="tab-content" id="myTabContent">
+                           
+
+                                    <% categories.forEach((file,index)=>{%>
+                                          <div class="tab-pane fade show action " id="<%= file.name %>" role="tabpanel" aria-labelledby="Audio=tab">
+                                                <ul class="folder-list" style="padding: 0">
+                                                      <% file.files.forEach((ele,index)=>{%>
+                                                            <% if(ele.categoriesId == file.id && ele.parent_id==null){ %>
+                                                                <li class="border-0 " style="list-style: none;">
+                                                                    <span  class="border-bottom py-2 d-flex justify-content-between align-items-center">
+                                                                       <div>
+                                                                           <i class="fa fa-folder mr-2"></i><%=ele.folder_name%>
+                                                                       </div>
+                                                                        <div>
+                                                                            <i class="fa fa-chevron-down" id="folder_<%=ele.id%>"  aria-hidden="true" ></i>
+                                                                            <i class="fa fa-plus-circle"  data-toggle="modal" onclick="PrivateFolder('<%-file.id%>','<%=ele.id%>')"  data-target="#PrivateFolder" aria-hidden="true"></i>
+                                                                            <a href="delete/<%=ele.id%>"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                                                        </div>
+                                                                    </span>
+                                                                    <%loop(file.files,ele.id)%>
+                                                                    <%docs(ele.docs,ele.id)%>
+                                                                </li>
+                                                            <% } %>
+                                                      <% }) %>  
+                                                </ul>
+                                            </div>   
+                                    <% }) %> 
+                                     
+                                   
+            
+                                   
+            
+                                  
+            
+                                 
+                                </div>
+                                                                 
+                                    
+                                    <!--Global Folder Model start  -->
+                                          <div class="modal fade" id="folder" tabindex="-1" aria-labelledby="folderLabel" aria-hidden="true">
+                                          <div class="modal-dialog">
+                                          <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h5 class="modal-title" id="folderLabel">Create Folder</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                <form action="/folder/builder" method="get">
+                                                      <div class="form-group">
+                                                            <label>Select Folder</label>
+                                                            <select class="form-control" name="categories">
+                                                                  <% categories.forEach((ele,index)=>{%>
+                                                                        <option value="<%=ele.id%>"><%=ele.name%></option>
+                                                                  <% }) %> 
+                                                            </select>
+                                                      </div>
+                                                   
+                                                      <div class="form-group">
+                                                            <label>Enter Name</label>
+                                                            <input type="text" class="form-control" name="name" placeholder="Enter Name" />
+                                                      </div>
+                                                      <div class="form-group">
+                                                            <button class="btn btn-primary" type="submit">Create</button>
+                                                      </div>
+                                                </form>
+                                                </div>
+                                          
+                                          </div>
+                                          </div>
+                                          </div>
+                                    <!---Global Folder Model end  -->
+            
+            
+            
+                                    <!--Private Folder Model start  -->
+                                          <div class="modal fade" id="PrivateFolder" tabindex="-1" aria-labelledby="privateFolderLabel" aria-hidden="true">
+                                          <div class="modal-dialog">
+                                          <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h5 class="modal-title" id="privateFolderLabel">Create Private Folder</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                <form action="/folder/private" method="get">
+                                                      <div class="form-group">
+                                                            <label>Select Type</label>
+                                                            <select class="form-control" name="type">
+                                                                 <option value="file">Folder</option>
+                                                                 <option value="docs">File</option>
+                                                            </select>
+                                                      </div>
+                                                      <div class="form-group">
+                                                            <input type="hidden" class="form-control" name="categories" id="selected_private_folder"  />
+                                                            <input type="hidden" class="form-control" name="parent" id="ParentFolder" />
+                                                            <label>Enter Name</label>
+                                                            <input type="text" class="form-control" name="name" placeholder="Enter Name" />
+                                                      </div>
+                                                      <div class="form-group">
+                                                            <button class="btn btn-primary" type="submit">Create</button>
+                                                      </div>
+                                                </form>
+                                                </div>
+                                          
+                                          </div>
+                                          </div>
+                                          </div>
+                                    <!---Private Folder Model end  -->
+            
+            
+            
+                                    
+                              <!-- </div> -->
+            
+                              </div>
+                        </div>
+                  </div>
+                  </div>
+                  <div class="col-md-7 animated fadeInRight">
+                        <div class="mt-2" id="editor"></div>
+                  </div>
+            </div>
+      </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="js/main.js"></script>
+
+</html>
+
+
+
+
+
+<!-- folder loop function start -->
+    <% function loop(arr,id){%>
+        <% arr.forEach((e,i)=>{ %>
+            <%if(e.parent_id==id){%>
+                <ul class="folder-list hideChild drop<%=id%>" style="padding-left: 15px;">
+                    <li class="border-0" style="list-style: none;">
+                        <span  class="border-bottom  py-2 d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="fa fa-folder mr-2"></i><%=e.folder_name%>
+                            </div>
+                                <div>
+                                    <i class="fa fa-chevron-down" id="folder_<%=e.id%>"  aria-hidden="true" ></i>
+                                    <i class="fa fa-plus-circle" data-toggle="modal" onclick="PrivateFolder('<%-e.categoriesId%>','<%=e.id%>')" data-target="#PrivateFolder" aria-hidden="true"></i>
+                                    <a href="delete/<%=e.id%>"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                </div>
+                        </span>
+                        <%loop(arr,e.id)%>
+                       
+                    </li>
+                </ul>
+            <%}%>
+        <% }) %>
+    <%}%>    
+<!-- folder loop function end -->
+
+<!-- docs loop  function start -->
+        <% function docs(arr,id){ %>
+        <% arr.forEach((e,i)=>{ %>
+            <%if(e.fileId==id){%>
+                <ul class="folder-list hideChild drop<%=id%>" style="padding-left: 15px;">
+                    <li  class="border-0 " style="list-style: none;">
+                        <span  class="border-bottom  py-2 d-flex justify-content-between align-items-center">
+                              <div>
+                                  <i class="fa fa-file mr-2"></i><%=e.name%>
+                              </div>
+                              <div>
+                                    <i class="fa fa-eye" onclick="viewFile(<%=e.id%>)"></i>
+                                    <a href="delete/doc/<%=e.id%>"><i class="fa fa-trash" aria-hidden="true" ></i></a>
+                              </div>
+                        </span>
+                    </li>
+                </ul>
+            <%}%>
+        <% }) %>
+    <%}%>    
+<!-- docs loop function end -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

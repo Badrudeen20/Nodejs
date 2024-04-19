@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique 
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  files     File[]
+  @@map("categories")
+}
+
+model File {
+  id        Int      @id @default(autoincrement())
+  categories Category   @relation(fields: [categoriesId], references: [id])
+  categoriesId   Int        @map("categories_id") 
+  parent_id      Int?     
+  folder_name    String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  docs     Docs[]
+  @@map("files")
+}
+
+
+model Docs {
+  id        Int      @id @default(autoincrement())
+  files     File     @relation(fields: [fileId], references: [id])
+  fileId    Int     @map("file_id") 
+  type      String
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("docs")
+}
+
+
+
+

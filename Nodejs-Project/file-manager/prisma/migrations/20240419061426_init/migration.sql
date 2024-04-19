@@ -1,0 +1,10 @@
+-- CreateTable
+CREATE TABLE "docs" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "file_id" INTEGER NOT NULL,
+    "type" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" DATETIME NOT NULL,
+    CONSTRAINT "docs_file_id_fkey" FOREIGN KEY ("file_id") REFERENCES "files" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
