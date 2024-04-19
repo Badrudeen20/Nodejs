@@ -1,6 +1,9 @@
 import express from "express";
 import router from "./route/web";
+import dotenv from 'dotenv';
 
+// Load environment variables from .env file
+dotenv.config();
 // const rootDir  = path.resolve(__dirname,'../')
 const app = express();
 const port = 9000;
