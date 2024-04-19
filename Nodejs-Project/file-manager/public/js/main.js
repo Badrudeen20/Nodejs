@@ -56,3 +56,57 @@
         $(ele).removeClass('fa-chevron-up')
       }
   }
+
+ /*  const tabs = document.querySelectorAll('.tab-link');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function(event) {
+        event.preventDefault();
+        const tabId = this.getAttribute('href').substring(1);
+        showTab(tabId);
+        history.pushState({}, '', '#' + tabId);
+    });
+  });
+const tabContents = document.querySelectorAll('.tab-content');
+function showTab(tabId) {
+  tabContents.forEach(tabContent => {
+    if(tabContent.id === tabId){
+      tabContent.classList.add('active');
+    }else{
+      tabContent.classList.remove('active');
+    }
+      
+  });
+}
+function showTab(tabId) {
+  tabContents.forEach(tabContent => {
+    if(tabContent.id === tabId){
+      tabContent.classList.add('active');
+    }else{
+      tabContent.classList.remove('active');
+    }
+      
+  });
+}
+function selectTab(tabId) {
+  
+  tabs.forEach(tab => {
+    const href = tab.getAttribute('href').substring(1)
+    if(href === tabId){
+      tab.classList.add('active');
+    }else{
+      tab.classList.remove('active');
+    } 
+  });
+}
+
+
+const init = 'Story'
+const initialTab = window.location.hash.substring(1);
+    if(initialTab) {
+      showTab(initialTab)
+      selectTab(initialTab)
+    }else{
+      showTab(init)
+      selectTab(init)
+    } 
+*/

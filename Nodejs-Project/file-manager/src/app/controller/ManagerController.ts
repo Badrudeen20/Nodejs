@@ -77,11 +77,30 @@ export async function privateFolder(req:Request,res:Response){
 
 export async function remove(req:Request,res:Response) {
       if(req.params.id){
-            const deleteFile = await prisma.file.delete({
-                  where: {
-                    id: +(req.params.id),
-                  },
-            })   
+            const file = await prisma.file.findUnique({
+                  where: { id: +(req.params.id) },
+            });
+            if(file){
+                  const docs = await prisma.docs.findMany({
+                        where: { fileId:file.id },
+                  });
+
+                  if(docs.length){
+                        for (let i = 0; i < docs.length; i++) {
+                              docRemover(docs[i].name)
+                        }
+                  }
+                  const deleteDoc = await prisma.docs.deleteMany({
+                        where: { fileId:file.id },
+                  });
+
+                  const deleteFile = await prisma.file.delete({
+                        where: { id:+(req.params.id) },
+                  });
+
+            }
+        
+            
       }
       return res.redirect('back')
 }
