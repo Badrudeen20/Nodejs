@@ -1,21 +1,20 @@
 import fs from "fs"
 import path  from "path"
+const rootPath = process.cwd();
 
-
-const docBuilder =  function(fileName:string):void {
-    const dirname = path.resolve(__filename,'../../../'); // Use __filename instead of __dirname
-    const folderPath = path.join(dirname, "storage");
-    
-    if (fs.existsSync(folderPath)) {
-      fs.writeFile(folderPath+"/"+fileName, 'Welcome', (err) => {
+const docBuilder =  function(fileName:string):boolean {
+    //const dirname = path.resolve(__filename,'../../../'); // Use __filename instead of __dirname
+    const filePath = path.join(rootPath, "storage/"+fileName);
+    if (!fs.existsSync(filePath)) {
+        fs.writeFile(filePath, 'Welcome', (err) => {
             if (err) {
                 console.error('Error creating file:', err);
-            } else {
-                console.log('File created successfully.');
-            }
-      });
+            } 
+        });
+        return true
     } else {
-        console.log(`Folder '${folderPath}' already exists.`);
+        console.log(`Folder '${filePath}' already exists.`);
+        return false
     }
 }
 

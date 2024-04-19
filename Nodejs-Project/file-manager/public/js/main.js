@@ -31,28 +31,24 @@
 
   function saveFile(fileId){
       var data = $('#txt').val();
-     
       $.ajax({
             type: 'POST',
-            url: '/save/'+fileId, // Server endpoint to handle the request
-            contentType: 'application/json', // Set content type to JSON
-            data: JSON.stringify({ data: data }), // Send data as JSON string
+            url: '/save/'+fileId, 
+            contentType: 'application/json', 
+            data: JSON.stringify({ data: data }), 
             success: function(response) {
-                // Log success message
                 console.log('File has been written successfully:', response);
             },
             error: function(xhr, status, error) {
-                // Log error message
                 console.error('Error writing file:', error);
             }
       });
   }
 
   function toggle(ele,folder){
-    //   $(ele).toggleClass()
-      $(`#childFile${folder}`).toggleClass("hidden");
-      $(`#childDocs${folder}`).toggleClass("hidden");
-      if($(`#childDocs${folder}`).hasClass("hidden") || $(`#childFile${folder}`).hasClass("hidden")){
+      $(`.childFile${folder}`).toggleClass("hidden");
+      $(`.childDocs${folder}`).toggleClass("hidden");
+      if($(`.childDocs${folder}`).hasClass("hidden") || $(`.childFile${folder}`).hasClass("hidden")){
         $(ele).addClass('fa-chevron-up')
         $(ele).removeClass('fa-chevron-down')
       }else{

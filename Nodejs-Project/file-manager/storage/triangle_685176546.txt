@@ -1,0 +1,12 @@
+Area of Triangle
+One of the properties of a triangle is its area, which is the region covered by the three-sided polygon in a plane. The formula for any triangle’s area is given by;
+
+Area of a Triangle = ½ × Base × Height
+
+One more formula has been introduced by a Mathematician, which is known as Heron’s Formula. This formula is used when the sides of the triangles are known to us. It is given by;
+
+Area of Triangle-Heron's Formula
+
+Where ‘s’ is the semi-perimeter of the triangle and given by;
+
+s = (a+b+c)/2
