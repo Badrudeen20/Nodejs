@@ -47,3 +47,16 @@
             }
       });
   }
+
+  function toggle(ele,folder){
+    //   $(ele).toggleClass()
+      $(`#childFile${folder}`).toggleClass("hidden");
+      $(`#childDocs${folder}`).toggleClass("hidden");
+      if($(`#childDocs${folder}`).hasClass("hidden") || $(`#childFile${folder}`).hasClass("hidden")){
+        $(ele).addClass('fa-chevron-up')
+        $(ele).removeClass('fa-chevron-down')
+      }else{
+        $(ele).addClass('fa-chevron-down')
+        $(ele).removeClass('fa-chevron-up')
+      }
+  }

@@ -5,8 +5,13 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Document</title>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
       <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+      <style>
+            .hidden {
+                display: none;
+            }
+      </style>
 </head>
 <body>
       <div class="container">
@@ -36,7 +41,7 @@
                            
 
                                     <% categories.forEach((file,index)=>{%>
-                                          <div class="tab-pane fade show action " id="<%= file.name %>" role="tabpanel" aria-labelledby="Audio=tab">
+                                          <div class="tab-pane fade show action <% if(index == 0){ %> active <% } %>" id="<%= file.name %>" role="tabpanel" aria-labelledby="Audio=tab">
                                                 <ul class="folder-list" style="padding: 0">
                                                       <% file.files.forEach((ele,index)=>{%>
                                                             <% if(ele.categoriesId == file.id && ele.parent_id==null){ %>
@@ -46,7 +51,7 @@
                                                                            <i class="fa fa-folder mr-2"></i><%=ele.folder_name%>
                                                                        </div>
                                                                         <div>
-                                                                            <i class="fa fa-chevron-down" id="folder_<%=ele.id%>"  aria-hidden="true" ></i>
+                                                                            <i class="fa fa-chevron-down" id="folder_<%=ele.id%>" onclick="toggle(this,<%=ele.id%>)"  aria-hidden="true" ></i>
                                                                             <i class="fa fa-plus-circle"  data-toggle="modal" onclick="PrivateFolder('<%-file.id%>','<%=ele.id%>')"  data-target="#PrivateFolder" aria-hidden="true"></i>
                                                                             <a href="delete/<%=ele.id%>"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                                                         </div>
@@ -174,14 +179,14 @@
     <% function loop(arr,id){%>
         <% arr.forEach((e,i)=>{ %>
             <%if(e.parent_id==id){%>
-                <ul class="folder-list hideChild drop<%=id%>" style="padding-left: 15px;">
+                <ul class="folder-list hideChild drop<%=id%>" id="childFile<%=id%>" style="padding-left: 15px;">
                     <li class="border-0" style="list-style: none;">
                         <span  class="border-bottom  py-2 d-flex justify-content-between align-items-center">
                             <div>
                                 <i class="fa fa-folder mr-2"></i><%=e.folder_name%>
                             </div>
                                 <div>
-                                    <i class="fa fa-chevron-down" id="folder_<%=e.id%>"  aria-hidden="true" ></i>
+                                    <i class="fa fa-chevron-down" id="folder_<%=e.id%>" onclick="toggle(this,<%=e.id%>)"  aria-hidden="true" ></i>
                                     <i class="fa fa-plus-circle" data-toggle="modal" onclick="PrivateFolder('<%-e.categoriesId%>','<%=e.id%>')" data-target="#PrivateFolder" aria-hidden="true"></i>
                                     <a href="delete/<%=e.id%>"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                 </div>
@@ -199,7 +204,7 @@
         <% function docs(arr,id){ %>
         <% arr.forEach((e,i)=>{ %>
             <%if(e.fileId==id){%>
-                <ul class="folder-list hideChild drop<%=id%>" style="padding-left: 15px;">
+                <ul class="folder-list hideChild drop<%=id%>" id="childDocs<%=id%>" style="padding-left: 15px;">
                     <li  class="border-0 " style="list-style: none;">
                         <span  class="border-bottom  py-2 d-flex justify-content-between align-items-center">
                               <div>
