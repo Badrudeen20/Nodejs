@@ -1,28 +1,24 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const passport = require('passport');
-const { url } = require('../../helper/url');
-const { user } = require('../../helper/user');
 module.exports = {
    
     cart:async function(req,res){
-      const userDetail = await user(req,res)
+      const user = res.locals.user
       const order = await prisma.order.findMany({
         include:{product:true},
         where: {
-          userId: userDetail.id,
+          userId: user.id,
           status:'CART'
         }
       })
       return res.render('Frontend/cart',{
         layout: 'Frontend/layout',
-        url:url(req,res),
-        user:userDetail,
         order:order
       })
     },
     addCart:async function(req,res){
-      const userDetail = await user(req,res)
+      const user = res.locals.user
       const product = await prisma.product.findUnique({
         where: {
           id:parseInt(req.params.id),
@@ -34,7 +30,7 @@ module.exports = {
       const order = await prisma.order.create({
         data: {
           productId: product.id,
-          userId: userDetail.id,
+          userId: user.id,
           price:product.price,
           status:'CART',
           quantity:parseInt(quantity) || 1
@@ -57,8 +53,8 @@ module.exports = {
       return res.redirect('back')
     },
     coupon:async function(req,res){
-      const user = await req.user
-      const {code} = req.body  
+      const user = res.locals.user
+      const { code } = req.body  
 
       const orders = await prisma.order.findMany({
         where: { userId: user.id}, // Use the orderId field for the where condition
@@ -90,7 +86,7 @@ module.exports = {
       return res.redirect('back')
     },
     checkout:async function(req,res){
-      const user = await req.user
+      const user = res.locals.user
       const order = await prisma.order.findMany({
         include:{product:true},
         where: {
@@ -100,8 +96,6 @@ module.exports = {
       })
       return res.render('Frontend/checkout',{
         layout: 'Frontend/layout',
-        url:url(req,res),
-        user:user,
         order:order
       })
     },
@@ -114,7 +108,7 @@ module.exports = {
       return res.redirect('back')
     },
     success:async function(req,res){
-      const userData = await user(req,res)
+      const user = res.locals.user
       const order = await prisma.order.findMany({
         where:{
           userId:userData.id,
@@ -146,8 +140,6 @@ module.exports = {
         
         return res.render('Frontend/success',{
           layout: 'Frontend/layout',
-          url:url(req,res),
-          user: userData,
         })
       }else{
         return res.redirect('back')

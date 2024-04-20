@@ -1,19 +1,15 @@
-const { url } = require("../../helper/url");
 const { PrismaClient } = require('@prisma/client');
-const { user } = require("../../helper/user");
 const prisma = new PrismaClient();
 
 module.exports = {
     
   view:async function(req,res){
     return res.render('Backend/brand',{ 
-      layout: 'Backend/layout',
-      url:url(req,res),
-      user:await user(req,res)  
+      layout: 'Backend/layout',  
     })
   },
   list:async function(req,res){
-   
+    
     const page = req.query.start || 1;
     const pageSize = req.query.length || 10; // Default page size
     const offset = (page - 1) * pageSize;

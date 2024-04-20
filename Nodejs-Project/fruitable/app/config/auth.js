@@ -1,8 +1,15 @@
+const express = require('express');
+const { authUser } = require('../helper/auth');
+const app = express();
+
+
 module.exports = {
   userEnsureAuthenticated: async function(req, res, next) {
     if(req.isAuthenticated()) {
        const user = await req.user
+       
        if(user.role=='user'){
+         res.locals.user = await authUser(user);
          return next();
        }
     }
@@ -13,6 +20,7 @@ module.exports = {
     if(req.isAuthenticated()) {
        const user = await req.user
        if(user.role=='admin'){
+         res.locals.user = user;
          return next();
        }
     }
@@ -34,5 +42,21 @@ module.exports = {
     }
     req.flash('error_msg', 'Please log in to view that resource');
     res.redirect('/admin/dashboard');      
+  },
+
+  userCheckAuthenticated:async function(req,res,next){
+    if(req.isAuthenticated()) {
+      const user = await req.user
+      if(user.role=='user'){
+        res.locals.user = await authUser(user);
+      }
+    }else{
+      res.locals.user = undefined
+    }
+   
+    return next();
   }
 };
+
+
+

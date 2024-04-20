@@ -30,7 +30,7 @@
                 <!-- <a class="navbar-brand brand-logo" href="index.html"><img src="<%- url %>backend/images/logo.svg" alt="logo"/></a> -->
                 <a class="navbar-brand brand-logo text-white">FRUITABLE</a>
                 <a class="navbar-brand brand-logo-mini text-light" href="<%-url%>admin/dashboard">
-                  FRU
+                  🍎
                 </a>
               </div>
               <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
@@ -125,6 +125,7 @@
                     <img src="<%- url %>assets/img/avatar.jpg">
                   </div>
                   <div class="user-name">
+                    
                     <%if(typeof user !== 'undefined' && user.role=='admin'){%>
                       <%- (user.username) %>
                     <%}%>

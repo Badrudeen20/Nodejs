@@ -1,6 +1,5 @@
-const { url } = require("../../helper/url");
+
 const { PrismaClient } = require('@prisma/client');
-const { user } = require("../../helper/user");
 const prisma = new PrismaClient();
 
 module.exports = {
@@ -8,8 +7,6 @@ module.exports = {
   view:async function(req,res){
     return res.render('Backend/customer',{ 
       layout: 'Backend/layout',
-      url:url(req,res),
-      user:await user(req,res) 
     })
   },
   list:async function(req,res){

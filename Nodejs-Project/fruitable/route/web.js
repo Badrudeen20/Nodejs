@@ -1,7 +1,7 @@
 const express = require('express');
 const DashboardController = require('../app/controller/backend/DashboardController');
 const AuthController = require('../app/controller/AuthController');
-const { adminForwardAuthenticated,userForwardAuthenticated,adminEnsureAuthenticated,userEnsureAuthenticated } = require('../app/config/auth');
+const { adminForwardAuthenticated,userForwardAuthenticated,adminEnsureAuthenticated,userEnsureAuthenticated, userCheckAuthenticated } = require('../app/config/auth');
 const  group = require('../app/helper/group');
 const HomeController = require('../app/controller/frontend/HomeController');
 
@@ -22,23 +22,23 @@ router.all('/login',userForwardAuthenticated,AuthController.login);
 router.all('/register',userForwardAuthenticated,AuthController.register);
 // Backend Controller
 
-router.use("/admin",adminEnsureAuthenticated, group((router) => {
-      router.get('/dashboard',DashboardController.view); 
-      router.get('/customers',CustomerController.view); 
-      router.get('/customers/list',CustomerController.list); 
-      router.get('/orders',OrderController.view); 
-      router.get('/orders/list',OrderController.list); 
-      router.get('/products',ProductController.view); 
-      router.get('/products/list',ProductController.list); 
-      router.get('/add-product',ProductController.addEdit); 
-      router.get('/edit-product/:id',ProductController.addEdit); 
-      router.post('/create-product',ProductController.createUpdate); 
-      router.get('/brands',BrandController.view); 
-      router.get('/brands/list',BrandController.list); 
-      router.post('/brand',BrandController.add); 
-      router.post('/brand/:id',BrandController.edit); 
-      router.get('/brand/:id',BrandController.delete); 
-      router.get('/logout',function(req,res){
+router.use("/admin",adminEnsureAuthenticated, group((route) => {
+      route.get('/dashboard',DashboardController.view); 
+      route.get('/customers',CustomerController.view); 
+      route.get('/customers/list',CustomerController.list); 
+      route.get('/orders',OrderController.view); 
+      route.get('/orders/list',OrderController.list); 
+      route.get('/products',ProductController.view); 
+      route.get('/products/list',ProductController.list); 
+      route.get('/add-product',ProductController.addEdit); 
+      route.get('/edit-product/:id',ProductController.addEdit); 
+      route.post('/create-product',ProductController.createUpdate); 
+      route.get('/brands',BrandController.view); 
+      route.get('/brands/list',BrandController.list); 
+      route.post('/brand',BrandController.add); 
+      route.post('/brand/:id',BrandController.edit); 
+      route.get('/brand/:id',BrandController.delete); 
+      route.get('/logout',function(req,res){
             req.logout(function(err){
                   if (err) {
                         req.flash('error_msg', 'Failed to logout');
@@ -53,24 +53,29 @@ router.use("/admin",adminEnsureAuthenticated, group((router) => {
 
 
 // Frontend Controller
-router.all('/',HomeController.home);
-router.get('/home',HomeController.home);
-router.get('/shop',ShopController.shop);
-router.get('/shop-detail/:id',ShopController.detail);
-router.get('/contact',HomeController.contact);
+
+
+router.use(userCheckAuthenticated,group((route)=>{
+      route.all('/',HomeController.home);
+      route.get('/home',HomeController.home);
+      route.get('/shop',ShopController.shop);
+      route.get('/shop-detail/:id',ShopController.detail);
+      route.get('/contact',HomeController.contact);
+}))
+
 
 //Auth Frontend Controller
 
 
-router.use(userEnsureAuthenticated, group((router) => {
-      router.get('/cart',CartController.cart);
-      router.post('/quantity/:id',CartController.quantity);
-      router.post('/coupon',CartController.coupon);
-      router.all('/addCart/:id',CartController.addCart);
-      router.get('/checkout',CartController.checkout);
-      router.get('/delete/:id',CartController.delete);
-      router.post('/success',CartController.success);
-      router.get('/logout',function(req,res){
+router.use(userEnsureAuthenticated, group((route) => {
+      route.get('/cart',CartController.cart);
+      route.post('/quantity/:id',CartController.quantity);
+      route.post('/coupon',CartController.coupon);
+      route.all('/addCart/:id',CartController.addCart);
+      route.get('/checkout',CartController.checkout);
+      route.get('/delete/:id',CartController.delete);
+      route.post('/success',CartController.success);
+      route.get('/logout',function(req,res){
             req.logout(function(err){
                   if (err) {
                         req.flash('error_msg', 'Failed to logout');

@@ -1,18 +1,17 @@
-const { url } = require("../../helper/url");
 const { PrismaClient } = require('@prisma/client');
-const { user } = require("../../helper/user");
 const { category, product } = require("./DashboardController");
 const prisma = new PrismaClient();
 const path = require('path');
-const fs = require('fs')
-const rootDir = path.resolve(__dirname, '../../../public/upload/');
+const fs = require('fs');
+const { rootPath } = require('../../helper/url');
+// const rootDir = path.resolve(__dirname, '../../../public/upload/');
+const rootDir = path.join(rootPath, 'public/upload/');
+
 module.exports = {
-    
+      
   view:async function(req,res){
     return res.render('Backend/product',{ 
       layout: 'Backend/layout',
-      url:url(req,res),
-      user:await user(req,res) 
     })
   },
   list:async function(req,res){
@@ -79,8 +78,6 @@ module.exports = {
     
     return res.render('Backend/add-product',{ 
       layout: 'Backend/layout',
-      url:url(req,res),
-      user:await user(req,res) ,
       item:item
     })
   },

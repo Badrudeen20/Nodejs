@@ -1,11 +1,13 @@
 const { PrismaClient } = require('@prisma/client');
+var express = require('express');
 const prisma = new PrismaClient();
 const passport = require('passport');
-const { url } = require('../helper/url');
+
 module.exports = {
     adminLogin:async function(req,res,next){
+      
       if (req.method === 'GET') {
-            return res.render('Auth/admin-login',{layout: 'Auth/layout',url:url(req,res)})
+            return res.render('Auth/admin-login',{layout: 'Auth/layout'})
       } else if (req.method === 'POST') {
             const { email,password } = req.body;
             req.body.role= 'admin'
@@ -20,7 +22,7 @@ module.exports = {
     },
     login:async function(req,res,next){
       if (req.method === 'GET') {
-            return res.render('Auth/login',{layout: 'Auth/layout',url:url(req,res)})
+            return res.render('Auth/login',{layout: 'Auth/layout'})
       } else if (req.method === 'POST') {
             const { email,password } = req.body;
             req.body.role= 'user'
@@ -35,7 +37,7 @@ module.exports = {
     },
     register:async function(req,res){
       if (req.method === 'GET') {
-            return res.render('Auth/register',{layout: 'Auth/layout',url:url(req,res)})
+            return res.render('Auth/register',{layout: 'Auth/layout'})
       } else if (req.method === 'POST') {
             const { email,password,username } = req.body;
             const newUser = await prisma.user.create({

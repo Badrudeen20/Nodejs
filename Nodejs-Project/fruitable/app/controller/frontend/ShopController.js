@@ -1,8 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const passport = require('passport');
-const { url } = require('../../helper/url');
-const { user } = require('../../helper/user');
 
 module.exports = {
   
@@ -105,14 +102,13 @@ module.exports = {
      
       return res.render('Frontend/shop',{
        layout: 'Frontend/layout',
-       url:url(req,res),
        brand:brands,
        query:query,
        filter:filter,
        product:list,
        page:totalPages,
        pageNumber:pageNumber,
-       user:await user(req,res),
+   
       })
     },
     detail:async function(req,res){
@@ -134,8 +130,7 @@ module.exports = {
      
      return res.render('Frontend/shop-detail',{
       layout: 'Frontend/layout',
-      url:url(req,res),
-      user:await user(req,res),
+     
       product:product,
       categories:categories
       })
