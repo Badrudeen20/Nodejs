@@ -17,19 +17,16 @@ socket.on("user", (id) => {
 socket.on("location", (latlong) => {
       for (const [id, val] of Object.entries(latlong)) {
             if(markers[id] && latlong[id].length){
-                  markers[id]
-                  .setLngLat(val)
-                  .addTo(map);
-                 
+               markers[id].setLngLat(val).addTo(map);
             }else{
-                  markers[id] = new mapboxgl.Marker({}); 
+               markers[id] = new mapboxgl.Marker({}); 
             }
       }    
 });
 
 socket.on("destroy", (id) => {
-      if(markers[id]) markers[id].remove()
-      console.log(id)
+   if(markers[id]) markers[id].remove()
+   console.log(id)
 });
 
 navigator.geolocation.watchPosition((data) => {
@@ -42,8 +39,6 @@ navigator.geolocation.watchPosition((data) => {
             };
             socket.emit("latlog", userData);
      }
-     
-     
 },(err) =>{
    console.log(err)
 },{enableHighAccuracy: true});
