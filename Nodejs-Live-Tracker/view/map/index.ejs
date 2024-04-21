@@ -28,7 +28,7 @@
       });
 
       socket.on("users-location", (users) => {
-        console.log(users)
+       
         users.forEach((user) => {
           if (user.longitude && user.latitude && Object.keys(markers).length) {
             for (const key in markers) {

@@ -20,7 +20,7 @@ app.use(web);
 // Socket.io 
 const rooms = {};
 io.on("connection", (socket) => {
-      socket.on("join", async (room) => {
+      socket.on("join", async () => {
             let socketId = socket.id;
             rooms[socketId] = []
             socket.join(socketId)
@@ -36,6 +36,7 @@ io.on("connection", (socket) => {
 
       socket.on("disconnect", async () => {
             delete rooms[socket.id];   
+            socket.broadcast.emit("destroy", socket.id);
       });
 }); 
 

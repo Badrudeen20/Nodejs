@@ -9,34 +9,28 @@ const map = new mapboxgl.Map({
 const socket = io();
 let user = {};
 socket.on("connect", () => {
-      socket.emit("join",{user:Math.floor(Math.random()*1000)});  
+      socket.emit("join");  
 });
 socket.on("user", (id) => {
-      if (markers[id]) {
-            markers[id].remove();
-      }
-      markers[id] = new mapboxgl.Marker({});
       user.id = id
 });
 socket.on("location", (latlong) => {
-     if(Object.keys(latlong).length){
-          for(const [key, value] of Object.entries(latlong)) {
-           
-            if (latlong[key].length && Object.keys(markers).length) {
-                  for (const k in markers) { 
-                    if (markers[k] == markers[user.id]) {
-                       markers[k]
-                      .setLngLat(latlong[k])
-                      .addTo(map);
-                    }
-                  }
+      for (const [id, val] of Object.entries(latlong)) {
+            if(markers[id] && latlong[id].length){
+                  markers[id]
+                  .setLngLat(val)
+                  .addTo(map);
+                 
             }else{
-                  markers[user.id] = new mapboxgl.Marker({});
+                  markers[id] = new mapboxgl.Marker({}); 
             }
-          }
-     }
-    
+      }
+      console.log(latlong)
       
+});
+
+socket.on("destroy", (id) => {
+      if(markers[id]) markers[id].remove()
 });
 
 navigator.geolocation.watchPosition((data) => {
@@ -54,4 +48,17 @@ navigator.geolocation.watchPosition((data) => {
 },(err) =>{
    console.log(err)
 },{enableHighAccuracy: true});
+
+/* setInterval(()=>{
+      let userData = {
+            latitude:  generateRandomCoordinate(-90, 90),
+            longitude: generateRandomCoordinate(-180, 180),
+            id:user.id
+      };
+      socket.emit("latlog", userData);
+},2000)
+
+function generateRandomCoordinate(min, max) {
+      return Math.random() * (max - min) + min;
+} */
 
