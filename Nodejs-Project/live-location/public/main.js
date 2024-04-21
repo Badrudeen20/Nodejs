@@ -24,13 +24,12 @@ socket.on("location", (latlong) => {
             }else{
                   markers[id] = new mapboxgl.Marker({}); 
             }
-      }
-      console.log(latlong)
-      
+      }    
 });
 
 socket.on("destroy", (id) => {
       if(markers[id]) markers[id].remove()
+      console.log(id)
 });
 
 navigator.geolocation.watchPosition((data) => {
@@ -49,16 +48,5 @@ navigator.geolocation.watchPosition((data) => {
    console.log(err)
 },{enableHighAccuracy: true});
 
-/* setInterval(()=>{
-      let userData = {
-            latitude:  generateRandomCoordinate(-90, 90),
-            longitude: generateRandomCoordinate(-180, 180),
-            id:user.id
-      };
-      socket.emit("latlog", userData);
-},2000)
 
-function generateRandomCoordinate(min, max) {
-      return Math.random() * (max - min) + min;
-} */
 
