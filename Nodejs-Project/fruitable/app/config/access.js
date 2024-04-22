@@ -38,12 +38,12 @@ module.exports = {
   userCheckAuthenticated:async function(req,res,next){
     if(req.cookies?.user && req.cookies.user.role=='user') {
       const user = req.cookies.user
+      console.log(user)
       res.locals.user = await authUser(user);
       
     }else{
       res.locals.user = undefined
     }
-   
     return next();
   }
 
