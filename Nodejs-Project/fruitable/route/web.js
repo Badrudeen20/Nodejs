@@ -1,7 +1,11 @@
 const express = require('express');
 const DashboardController = require('../app/controller/backend/DashboardController');
 const AuthController = require('../app/controller/AuthController');
-const { adminForwardAuthenticated,userForwardAuthenticated,adminEnsureAuthenticated,userEnsureAuthenticated, userCheckAuthenticated } = require('../app/config/auth');
+const { adminForwardAuthenticated,
+        userForwardAuthenticated,
+        adminEnsureAuthenticated,
+        userEnsureAuthenticated, 
+        userCheckAuthenticated } = require('../app/config/access');
 const  group = require('../app/helper/group');
 const HomeController = require('../app/controller/frontend/HomeController');
 
@@ -39,7 +43,9 @@ router.use("/admin",adminEnsureAuthenticated, group((route) => {
       route.post('/brand/:id',BrandController.edit); 
       route.get('/brand/:id',BrandController.delete); 
       route.get('/logout',function(req,res){
-            req.logout(function(err){
+            res.clearCookie('user')
+            res.redirect('/admin/login'); 
+            /* req.logout(function(err){
                   if (err) {
                         req.flash('error_msg', 'Failed to logout');
                         res.redirect('back'); 
@@ -47,7 +53,7 @@ router.use("/admin",adminEnsureAuthenticated, group((route) => {
                         req.flash('success_msg', 'You are logged out');
                         res.redirect('/admin/login'); 
                   }
-            });  
+            });   */
       });
 }));
 
@@ -76,14 +82,16 @@ router.use(userEnsureAuthenticated, group((route) => {
       route.get('/delete/:id',CartController.delete);
       route.post('/success',CartController.success);
       route.get('/logout',function(req,res){
-            req.logout(function(err){
+            res.clearCookie('user')
+            res.redirect('/login'); 
+            /* req.logout(function(err){
                   if (err) {
                         req.flash('error_msg', 'Failed to logout');
                         res.redirect('/'); 
                   } else {
                         res.redirect('/login'); 
                   }
-            });
+            }); */
             
       });
 }));

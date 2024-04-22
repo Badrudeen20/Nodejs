@@ -27,7 +27,6 @@ io.on("connection", (socket) => {
             io.to(socketId).emit("user", socketId); 
            
       });
-
       socket.on("latlog", (userData) => {
          const { latitude, longitude, id } = userData
          rooms[id] = [longitude,latitude]

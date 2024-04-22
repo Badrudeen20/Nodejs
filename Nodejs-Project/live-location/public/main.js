@@ -44,4 +44,17 @@ navigator.geolocation.watchPosition((data) => {
 },{enableHighAccuracy: true});
 
 
+/* setInterval(()=>{
+      let userData = {
+            latitude: generateRandomCoordinate(-90, 90), // Latitude range: -90 to 90
+            longitude: generateRandomCoordinate(-180, 180), // Longitude range: -180 to 180
+            id:user.id
+      };
+      socket.emit("latlog", userData);
+        
+},2000)
 
+function generateRandomCoordinate(min, max) {
+      return Math.random() * (max - min) + min;
+}
+ */

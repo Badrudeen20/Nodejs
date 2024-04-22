@@ -49,15 +49,13 @@
 
       navigator.geolocation.watchPosition((data) => {
             if (user.id) {
-                  if (user.mobile) {
-                        let { latitude, longitude } = data.coords;
-                        let userData = {
-                              latitude: latitude,
-                              longitude: longitude,
-                              id:user.id
-                        };
-                        socket.emit("update", userData);
-                  }
+                  let { latitude, longitude } = data.coords;
+                  let userData = {
+                        latitude: latitude,
+                        longitude: longitude,
+                        id:user.id
+                  };
+                  socket.emit("update", userData);
             }
       },(err) =>{
          console.log(err)

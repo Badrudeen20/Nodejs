@@ -2,6 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 var express = require('express');
 const prisma = new PrismaClient();
 const passport = require('passport');
+const { validate } = require('../config/validate');
 
 module.exports = {
     adminLogin:async function(req,res,next){
@@ -9,13 +10,22 @@ module.exports = {
       if (req.method === 'GET') {
             return res.render('Auth/admin-login',{layout: 'Auth/layout'})
       } else if (req.method === 'POST') {
-            const { email,password } = req.body;
+           /*  const { email,password } = req.body;
             req.body.role= 'admin'
             passport.authenticate('local', {
               successRedirect: '/admin/dashboard',
               failureRedirect: '/admin/login',
               failureFlash: true
-            })(req, res, next);
+            })(req, res, next); */
+            const user = await validate(req.body);
+            if (user) {
+              res.cookie("user", user);
+              req.body.role= 'admin'
+              res.redirect('/admin/dashboard');
+            } else {
+              res.render('/admin/login', { error: 'Invalid username or password' });
+            }
+
       } else {
         res.status(405).send('Method Not Allowed');
       }
@@ -24,13 +34,22 @@ module.exports = {
       if (req.method === 'GET') {
             return res.render('Auth/login',{layout: 'Auth/layout'})
       } else if (req.method === 'POST') {
-            const { email,password } = req.body;
-            req.body.role= 'user'
-            passport.authenticate('local', {
-              successRedirect: '/home',
-              failureRedirect: '/login',
-              failureFlash: true
-            })(req, res, next);
+            /*  const { email,password } = req.body;
+                req.body.role= 'user'
+                passport.authenticate('local', {
+                  successRedirect: '/home',
+                  failureRedirect: '/login',
+                  failureFlash: true
+                })(req, res, next); */
+
+            const user = await validate(req.body);
+            if (user) {
+              res.cookie("user", user);
+              req.body.role= 'user'
+              res.redirect('/home');
+            } else {
+              res.render('/login', { error: 'Invalid username or password' });
+            }
       } else {
         res.status(405).send('Method Not Allowed');
       }

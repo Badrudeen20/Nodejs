@@ -28,9 +28,9 @@
       });
 
       socket.on("users-location", (users) => {
-       
+        
         users.forEach((user) => {
-          if (user.longitude && user.latitude && Object.keys(markers).length) {
+          /* if (user.longitude && user.latitude && Object.keys(markers).length) {
             for (const key in markers) {
               if (markers[key] == markers[user.id]) {
                 markers[user.id]
@@ -40,28 +40,36 @@
             }
           }else{
             markers[user.id] = new mapboxgl.Marker({});
+          } */
+
+          if(user.longitude && user.latitude && markers[user.is]){
+                markers[user.id]
+                .setLngLat([user.longitude, user.latitude])
+                .addTo(map);
+          }else{
+            markers[user.id] = new mapboxgl.Marker({});
           }
+
         });
       });
 
 
       socket.on("user-connected", (userData) => {
-        if (markers[userData.id]) {
-            markers[userData.id].remove();
-        }
+        if (markers[userData.id]) markers[userData.id].remove();
         markers[userData.id] = new mapboxgl.Marker({});
         console.log(userData.username + " is connected");
       });
 
 
       socket.on("user-disconnect", (user) => {
-        if (Object.keys(markers).length) {
+       /*if (Object.keys(markers).length) {
           for (const key in markers) {
             if (markers[key] == markers[user.id]) {
                 markers[user.id].remove();
             }
           }
-        }
+        } */
+        if(markers[user.id]) markers[user.id].remove();
         console.log(user.username + " is disconnected");
       });
      
