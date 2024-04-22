@@ -5,7 +5,7 @@ const { adminForwardAuthenticated,
         userForwardAuthenticated,
         adminEnsureAuthenticated,
         userEnsureAuthenticated, 
-        userCheckAuthenticated } = require('../app/config/access');
+        userCheckAuthenticated } = require('../app/config/pass');
 const  group = require('../app/helper/group');
 const HomeController = require('../app/controller/frontend/HomeController');
 
@@ -43,9 +43,9 @@ router.use("/admin",adminEnsureAuthenticated, group((route) => {
       route.post('/brand/:id',BrandController.edit); 
       route.get('/brand/:id',BrandController.delete); 
       route.get('/logout',function(req,res){
-            res.clearCookie('user')
-            res.redirect('/admin/login'); 
-            /* req.logout(function(err){
+
+           /*  res.clearCookie('user')
+            req.logout(function(err){
                   if (err) {
                         req.flash('error_msg', 'Failed to logout');
                         res.redirect('back'); 
@@ -53,7 +53,15 @@ router.use("/admin",adminEnsureAuthenticated, group((route) => {
                         req.flash('success_msg', 'You are logged out');
                         res.redirect('/admin/login'); 
                   }
-            });   */
+            });  */ 
+
+            req.session.destroy((err) => {
+                  if (err) {
+                      console.error('Error destroying session:', err);
+                  } else {
+                        res.redirect('/admin/login'); 
+                  }
+            });
       });
 }));
 
@@ -82,9 +90,9 @@ router.use(userEnsureAuthenticated, group((route) => {
       route.get('/delete/:id',CartController.delete);
       route.post('/success',CartController.success);
       route.get('/logout',function(req,res){
-            res.clearCookie('user')
-            res.redirect('/login'); 
-            /* req.logout(function(err){
+
+            /* res.clearCookie('user')
+            req.logout(function(err){
                   if (err) {
                         req.flash('error_msg', 'Failed to logout');
                         res.redirect('/'); 
@@ -92,6 +100,14 @@ router.use(userEnsureAuthenticated, group((route) => {
                         res.redirect('/login'); 
                   }
             }); */
+
+            req.session.destroy((err) => {
+                  if (err) {
+                      console.error('Error destroying session:', err);
+                  } else {
+                      res.redirect('/login'); 
+                  }
+            });
             
       });
 }));

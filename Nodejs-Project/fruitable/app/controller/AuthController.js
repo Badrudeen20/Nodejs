@@ -19,7 +19,8 @@ module.exports = {
             })(req, res, next); */
             const user = await validate(req.body);
             if (user) {
-              res.cookie("user", user);
+              /* res.cookie("user", user); */
+              req.session.user=user;
               req.body.role= 'admin'
               res.redirect('/admin/dashboard');
             } else {
@@ -41,10 +42,12 @@ module.exports = {
                   failureRedirect: '/login',
                   failureFlash: true
                 })(req, res, next); */
-
+            
             const user = await validate(req.body);
             if (user) {
-              res.cookie("user", user);
+              
+              /* res.cookie("user", user); */
+              req.session.user=user;
               req.body.role= 'user'
               res.redirect('/home');
             } else {

@@ -12,7 +12,7 @@ const cookieParser = require('cookie-parser');
 const web = require('./route/web')
 const upload = require('express-fileupload');
 const { rootPath, url } = require('./app/helper/url');
-const { adminEnsureAuthenticated } = require('./app/config/auth');
+
 app.locals.rootPath = rootPath;
 // Passport Config
 
@@ -26,7 +26,7 @@ app.set('view engine','ejs')
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
-app.use(cookieParser()); 
+/* app.use(cookieParser()); */ 
 app.use(async (req,res,next)=>{
   app.locals.url = url(req,res)
   next()
@@ -34,16 +34,16 @@ app.use(async (req,res,next)=>{
 
 // Express session
 app.use(
-      /* session({
-        secret: process.env.SECRET || 'secret',
-        resave: true,
-        saveUninitialized: true
-      }) */
+      // session({
+      //   secret: process.env.SECRET || 'secret',
+      //   resave: true,
+      //   saveUninitialized: true
+      // })
       session({
         secret: process.env.SECRET || 'secret',
         resave: false,
         saveUninitialized: false,
-        cookie: { secure: true }
+        cookie: { secure: false,expires:60000 }
       })
 );
     

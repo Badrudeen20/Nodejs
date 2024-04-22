@@ -5,8 +5,8 @@ const app = express();
 module.exports = {
   
   userEnsureAuthenticated: async function(req, res, next) {
-      if(req.cookies?.user && req.cookies.user.role=='user') {
-         const user = req.cookies.user
+      if(req.session?.user && req.session?.user.role=='user') {
+         const user = req.session.user
          res.locals.user = await authUser(user);
          return next();
       }
@@ -14,31 +14,31 @@ module.exports = {
       res.redirect('/login');
   },
   adminEnsureAuthenticated: async function(req, res, next) {
-      if(req.cookies?.user && req.cookies.user.role=='admin') {
-         res.locals.user = req.cookies.user;
+      if(req.session?.user && req.session?.user.role=='admin') {
+         res.locals.user = req.session.user;
          return next();
       }
     req.flash('error_msg', 'Please log in to view that resource');
     res.redirect('/admin/login');
   },
   userForwardAuthenticated: async function(req, res, next) {
-    if(!req.cookies?.user || req.cookies.user.role!=='user') {
-      return next();
+    if(req.session?.user && req.session?.user.role=='user') {
+      res.redirect('/home');    
     }
     req.flash('error_msg', 'Please log in to view that resource');
-    res.redirect('/home');      
+    return next();
   },
   adminForwardAuthenticated:async function(req, res, next) {
-    if(!req.cookies?.user || req.cookies.user.role!=='admin') {
+    if(!req.session?.user || req.session?.user.role!=='admin') {
         return next();
     }
     req.flash('error_msg', 'Please log in to view that resource');
     res.redirect('/admin/dashboard');      
   },
   userCheckAuthenticated:async function(req,res,next){
-    console.log(req.session.user)
-    if(req.cookies?.user && req.cookies.user.role=='user') {
-      const user = req.cookies.user
+    console.log(req.session?.user)
+    if(req.session?.user && req.session?.user.role=='user') {
+      const user = req.session.user
       res.locals.user = await authUser(user);
       
     }else{
@@ -46,9 +46,5 @@ module.exports = {
     }
     return next();
   }
-
-
-
- 
 
 };
