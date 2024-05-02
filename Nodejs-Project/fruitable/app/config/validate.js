@@ -10,5 +10,12 @@ module.exports = {
             })
             if(user && user.password == password) return user
             return false    
+      },
+      checkUser:async function({email,username}){
+            const user = await prisma.user.findUnique({
+                  where: {email:email},
+            })
+            if(user) return user
+            return false    
       }
 }

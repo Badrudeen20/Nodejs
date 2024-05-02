@@ -12,6 +12,10 @@ const cookieParser = require('cookie-parser');
 const web = require('./route/web')
 const upload = require('express-fileupload');
 const { rootPath, url } = require('./app/helper/url');
+// Cluster
+const cluster = require('cluster');
+const http = require('http');
+const numCPUs = require('os').cpus().length;
 
 app.locals.rootPath = rootPath;
 // Passport Config
@@ -53,8 +57,18 @@ app.use(
 app.use(passport.session()); 
 */
 app.use(flash()); 
-
 app.use(web)
-app.listen( PORT, function(req,res) {
-   console.log( 'server running on ' + PORT );
-});
+
+
+
+if (cluster.isMaster) {
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+
+} else {
+  app.listen( PORT, function(req,res) {
+    console.log( 'server running on ' + PORT );
+ });
+}
+

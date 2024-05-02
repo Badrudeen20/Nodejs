@@ -19,23 +19,35 @@ module.exports = {
     },
     addCart:async function(req,res){
       const user = res.locals.user
-      const product = await prisma.product.findUnique({
+      const isAdded = await prisma.order.findMany({
         where: {
-          id:parseInt(req.params.id),
-        },
-      })
-      if(req.method === 'POST'){
-        var { quantity } = req.body
-      }
-      const order = await prisma.order.create({
-        data: {
-          productId: product.id,
           userId: user.id,
-          price:product.price,
-          status:'CART',
-          quantity:parseInt(quantity) || 1
-        },
-      });
+          productId:parseInt(req.params.id),
+          status:'CART'
+        }
+      })
+      console.log(isAdded)
+      if(isAdded.length==0){
+        const product = await prisma.product.findUnique({
+          where: {
+            id:parseInt(req.params.id),
+          },
+        })
+        if(req.method === 'POST'){
+          var { quantity } = req.body
+        }
+        
+        const order = await prisma.order.create({
+          data: {
+            productId: product.id,
+            userId: user.id,
+            price:product.price,
+            status:'CART',
+            quantity:parseInt(quantity) || 1
+          },
+        });
+      }
+      
       return res.redirect('back')
     },
     quantity:async function(req,res){

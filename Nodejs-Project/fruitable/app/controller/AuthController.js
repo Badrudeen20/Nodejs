@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 var express = require('express');
 const prisma = new PrismaClient();
 const passport = require('passport');
-const { validate } = require('../config/validate');
+const { validate,checkUser } = require('../config/validate');
 
 module.exports = {
     adminLogin:async function(req,res,next){
@@ -51,7 +51,8 @@ module.exports = {
               req.body.role= 'user'
               res.redirect('/home');
             } else {
-              res.render('/login', { error: 'Invalid username or password' });
+              return res.redirect('back');
+              // res.render('/login', { error: 'Invalid username or password' });
             }
       } else {
         res.status(405).send('Method Not Allowed');
@@ -62,15 +63,21 @@ module.exports = {
             return res.render('Auth/register',{layout: 'Auth/layout'})
       } else if (req.method === 'POST') {
             const { email,password,username } = req.body;
-            const newUser = await prisma.user.create({
-              data: {
-                email: email,
-                password: password,
-                username:username,
-                role:'user'
-              },
-            });
-            return res.redirect('/login')
+            const check = await checkUser({email,username});
+      
+            if(check==false){
+              const newUser = await prisma.user.create({
+                data: {
+                  email: email,
+                  password: password,
+                  username:username,
+                  role:'user'
+                },
+              });
+              return res.redirect('/login')
+            }
+            return res.redirect('back')
+            
       } else {
         res.status(405).send('Method Not Allowed');
       }
