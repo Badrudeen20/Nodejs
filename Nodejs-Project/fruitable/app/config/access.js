@@ -36,7 +36,7 @@ module.exports = {
     res.redirect('/admin/dashboard');      
   },
   userCheckAuthenticated:async function(req,res,next){
-    console.log(req.session.user)
+  
     if(req.cookies?.user && req.cookies.user.role=='user') {
       const user = req.cookies.user
       res.locals.user = await authUser(user);
