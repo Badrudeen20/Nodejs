@@ -1,10 +1,7 @@
-<% if(locals.errors){ %> 
-      <% errors.forEach(function(error) { %>
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          <%= error.msg %>
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+<% if (typeof messages !== 'undefined' && messages.length > 0) { %> 
+      <% messages.forEach(function(message) { %>
+        <div style="text-align: center;color: rgb(236, 80, 59);">
+          <%- message %>
         </div>
       <% }); %> 
 <% } %> 

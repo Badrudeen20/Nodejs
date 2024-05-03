@@ -3,7 +3,7 @@ const { category, product } = require("./DashboardController");
 const prisma = new PrismaClient();
 const path = require('path');
 const fs = require('fs');
-const { rootPath } = require('../../helper/url');
+const { rootPath } = require('../../../helper/url');
 // const rootDir = path.resolve(__dirname, '../../../public/upload/');
 const rootDir = path.join(rootPath, 'public/upload/');
 

@@ -5,6 +5,7 @@ module.exports = {
    
     cart:async function(req,res){
       const user = res.locals.user
+      
       const order = await prisma.order.findMany({
         include:{product:true},
         where: {
@@ -26,7 +27,7 @@ module.exports = {
           status:'CART'
         }
       })
-      console.log(isAdded)
+    
       if(isAdded.length==0){
         const product = await prisma.product.findUnique({
           where: {

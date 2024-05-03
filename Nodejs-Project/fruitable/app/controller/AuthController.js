@@ -1,14 +1,15 @@
 const { PrismaClient } = require('@prisma/client');
-var express = require('express');
+// var express = require('express');
 const prisma = new PrismaClient();
-const passport = require('passport');
+// const passport = require('passport');
 const { validate,checkUser } = require('../config/validate');
 
 module.exports = {
     adminLogin:async function(req,res,next){
       
       if (req.method === 'GET') {
-            return res.render('Auth/admin-login',{layout: 'Auth/layout'})
+          const messages = req.flash('error');   
+          return res.render('Auth/admin-login',{layout: 'Auth/layout',messages})
       } else if (req.method === 'POST') {
            /*  const { email,password } = req.body;
             req.body.role= 'admin'
@@ -18,13 +19,16 @@ module.exports = {
               failureFlash: true
             })(req, res, next); */
             const user = await validate(req.body);
-            if (user) {
+            if (user && user.role=='admin') {
               /* res.cookie("user", user); */
               req.session.user=user;
               req.body.role= 'admin'
               res.redirect('/admin/dashboard');
             } else {
-              res.render('/admin/login', { error: 'Invalid username or password' });
+              req.flash('error', 'Invalied Creditial');
+              
+              return res.redirect('back');
+              // res.render('/admin/login', { error: 'Invalid username or password' });
             }
 
       } else {
@@ -33,7 +37,8 @@ module.exports = {
     },
     login:async function(req,res,next){
       if (req.method === 'GET') {
-            return res.render('Auth/login',{layout: 'Auth/layout'})
+          const messages = req.flash('error');
+          return res.render('Auth/login',{layout: 'Auth/layout',messages:messages})
       } else if (req.method === 'POST') {
             /*  const { email,password } = req.body;
                 req.body.role= 'user'
@@ -44,13 +49,13 @@ module.exports = {
                 })(req, res, next); */
             
             const user = await validate(req.body);
-            if (user) {
-              
+            if (user && user.role=='user') {
               /* res.cookie("user", user); */
               req.session.user=user;
               req.body.role= 'user'
               res.redirect('/home');
             } else {
+              req.flash('error', 'Invalied Creditial');
               return res.redirect('back');
               // res.render('/login', { error: 'Invalid username or password' });
             }
@@ -60,7 +65,8 @@ module.exports = {
     },
     register:async function(req,res){
       if (req.method === 'GET') {
-            return res.render('Auth/register',{layout: 'Auth/layout'})
+        const messages = req.flash('error');   
+        return res.render('Auth/register',{layout: 'Auth/layout',messages})
       } else if (req.method === 'POST') {
             const { email,password,username } = req.body;
             const check = await checkUser({email,username});
@@ -76,6 +82,7 @@ module.exports = {
               });
               return res.redirect('/login')
             }
+            const messages = req.flash('error','Email Already Registered!');   
             return res.redirect('back')
             
       } else {

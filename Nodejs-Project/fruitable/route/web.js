@@ -6,7 +6,7 @@ const { adminForwardAuthenticated,
         adminEnsureAuthenticated,
         userEnsureAuthenticated, 
         userCheckAuthenticated } = require('../app/config/pass');
-const  group = require('../app/helper/group');
+const  group = require('../helper/group');
 const HomeController = require('../app/controller/frontend/HomeController');
 
 const CustomerController = require('../app/controller/backend/CustomerController');

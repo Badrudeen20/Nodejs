@@ -1,5 +1,5 @@
 const express = require('express');
-const { authUser } = require('../helper/auth');
+const { authUser } = require('../../helper/auth');
 const app = express();
 
 module.exports = {
@@ -36,7 +36,6 @@ module.exports = {
     res.redirect('/admin/dashboard');      
   },
   userCheckAuthenticated:async function(req,res,next){
-    console.log(req.session?.user)
     if(req.session?.user && req.session?.user.role=='user') {
       const user = req.session.user
       res.locals.user = await authUser(user);
