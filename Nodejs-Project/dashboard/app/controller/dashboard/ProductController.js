@@ -13,7 +13,9 @@ module.exports = {
     const page = req.query.start || 1;
     const pageSize = req.query.length || 10; // Default page size
     const offset = (page - 1) * pageSize;
-    const search = req.query.search || '';  
+    const search = req.query.search || '';
+  
+    const totalCount = await prisma.product.count()
     const searchCount = await prisma.product.count({
       where: {
         name: {
