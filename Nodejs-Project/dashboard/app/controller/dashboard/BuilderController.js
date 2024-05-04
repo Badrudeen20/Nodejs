@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 module.exports = {
       
   builder:async function(req,res){
-    const forms = await prisma.form.findMany()
+    const forms = await prisma.form.findMany({})
     return res.render('Backend/builder',{ 
       layout: 'Backend/layout',
       forms
