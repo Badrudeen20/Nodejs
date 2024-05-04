@@ -106,7 +106,6 @@ module.exports = {
             price: +price,
             search: search,
             status: status,
-            image: filename,
             description: desc,
             rating:5
           }
