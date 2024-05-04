@@ -82,10 +82,10 @@ module.exports = {
 
   createUpdate:async function(req,res){
    
-      let {name,price,additional,search,status,desc,filename} = req.body
+      let {name,price,search,status,desc,filename} = req.body
      
       if(req.body.id){
-        const update = await prisma.product.update({
+        await prisma.product.update({
           where:{
              id:+(req.body.id)
           },
@@ -101,7 +101,7 @@ module.exports = {
         });
       
       }else{
-        const product = await prisma.product.create({
+         await prisma.product.create({
           data: {
             name: name,
             price: +price,
