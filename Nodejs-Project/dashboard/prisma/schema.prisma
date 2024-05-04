@@ -11,18 +11,6 @@ datasource db {
 }
 
 
-model User {
-  id        Int      @id @default(autoincrement())
-  username  String   
-  email     String   @unique 
-  password  String   
-  role      String   
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  @@map("users")
-}
-
-
 model Dynamicform {
   id        Int       @id @default(autoincrement())
   name      String    @unique  
@@ -33,19 +21,7 @@ model Dynamicform {
   @@map("dynamicforms")
 }
 
-model Product {
-  id             Int            @id @default(autoincrement())
-  name           String         @unique
-  search         String
-  price          Float
-  image          String?
-  rating         Int            @default(0)
-  status         String         @default("ACTIVE")
-  description    String?        
-  createdAt      DateTime       @default(now()) @map("created_at")
-  updatedAt      DateTime       @updatedAt @map("updated_at")
-  @@map("products")
-}
+
 
 
 
