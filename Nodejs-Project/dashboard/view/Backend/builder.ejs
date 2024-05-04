@@ -1,0 +1,133 @@
+
+      <!-- partial -->
+      <div class="content-wrapper">
+           <div class="row">
+            <div class="col-sm-12 col-lg-3 mb-2">
+              <form class="form-group d-flex" method="post" action="<%-url%>admin/add-form">
+                  <input type="text" name="form" class="form-control" />
+                  <input type="hidden" name="type" value="add" class="form-control" />
+                  <button type="submit" class="btn btn-sm btn-primary float-right mx-1">Create</button>
+              </form>
+              <div class="forms-list ">
+                 
+                  <ul class="list-group" style="max-height: 550px; overflow-y: scroll;">
+                        <%forms.forEach(item=>{ %>
+                              <li class="list-group-item mt-1 d-flex justify-content-between" data-id="<%-item.id%>" data-json='<%-JSON.parse(item.form)%>'>
+                                    <%-item.name%>
+                                    <a href="<%-url%>admin/<%-item.id%>/delete-form">delete</a>
+                              </li>
+                        <% })%>
+                       
+                  </ul>
+              </div>
+               
+            </div>
+            <div class="col-sm-12 col-lg-9 ">
+                  <div id="fb-editor"></div>
+            </div>
+           </div>
+           
+           
+      </div>
+        <!-- content-wrapper ends -->
+  
+  
+  
+       <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script> -->
+      <script src="<%- url %>backend/vendors/base/vendor.bundle.base.js"></script>
+      <script src="<%- url %>backend/js/template.js"></script>
+      <script src="<%- url %>backend/js/off-canvas.js"></script>
+       
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+      <script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
+      <script>
+            
+            jQuery(function($) {
+                  const templateSelect = document.getElementById("formTemplates");
+                  var options = {
+                        onSave: function(evt, formData) {
+                              if($('.list-group').find('li').length > 0){
+                                   if($('li.selected').length > 0){
+                                    let formId = $('li.selected').attr('data-id')
+                                    createForm(formData,formId)
+                                   }else{
+                                    alert('Select Form')
+                                   }
+                              }else{
+                                    alert('Create Form')
+                              }
+                              
+                        }
+                  };
+                  const templates = {
+                        user: [
+                              {
+                              type: "text",
+                              label: "Name:",
+                              subtype: "text",
+                              className: "form-control",
+                              name: "text-1475765723950"
+                              },
+                              {
+                              type: "text",
+                              subtype: "email",
+                              label: "Email:",
+                              className: "form-control",
+                              name: "text-1475765724095"
+                              },
+                              {
+                              type: "text",
+                              subtype: "tel",
+                              label: "Phone:",
+                              className: "form-control",
+                              name: "text-1475765724231"
+                              },
+                              {
+                              type: "textarea",
+                              label: "Short Bio:",
+                              className: "form-control",
+                              name: "textarea-1475765724583"
+                              }
+                        ], 
+                  };
+                  const formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
+               
+                  $('ul.list-group li').each((idx,li)=>{
+                        let parent = $('ul.list-group')
+                        $(li).click(function(){
+                              $(parent).find('li').removeClass('selected')
+                              $(this).addClass('selected')
+                              if($(this).attr('data-json')){
+                                    formBuilder.actions.setData($(this).attr('data-json'));
+                              }else{
+                                    formBuilder.actions.setData([]); 
+                              }
+                              
+                        })
+                  })
+                   
+            });
+
+            
+            function createForm(json,formId){
+                  $.ajax({
+                        url: '<%-url%>admin/add-form', 
+                        method: 'POST', 
+                        dataType: 'json', 
+                        data:{type:'update',json:json,formId:formId},
+                        success: function(data) { 
+                           let json = JSON.parse(data.json.form)
+                           $('li.selected').attr('data-json',json)    
+                           
+                       
+                        },
+                        error: function(xhr, status, error) { 
+                           console.error('Error:', error);
+                       
+                        }
+                  });
+            }
+         
+      </script>
+     

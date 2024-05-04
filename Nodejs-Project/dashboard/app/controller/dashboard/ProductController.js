@@ -68,7 +68,6 @@ module.exports = {
     const item = {}
     if(req.params.id){
       item.product = await prisma.product.findUnique({
-        include: {categories:true,brand:true},
         where:{
           id:+(req.params.id)
         }
@@ -134,7 +133,6 @@ module.exports = {
           },
           data: {
             name: name,
-            brand: { connect: { id: +brand } },
             price: +price,
             search: search,
             status: status,
@@ -178,7 +176,6 @@ module.exports = {
         const product = await prisma.product.create({
           data: {
             name: name,
-            brand: { connect: { id: +brand } },
             price: +price,
             search: search,
             status: status,
@@ -187,12 +184,7 @@ module.exports = {
             rating:5
           }
         });
-        const categories = await prisma.category.create({
-          data:{
-            additional:additional,
-            productId:product.id
-          }
-        })
+       
       }
       return res.redirect('products')
   }

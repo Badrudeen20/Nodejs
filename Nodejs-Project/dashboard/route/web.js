@@ -2,6 +2,7 @@ const express = require('express');
 const DashboardController = require('../app/controller/dashboard/DashboardController');
 const  group = require('../helper/group');
 const ProductController = require('../app/controller/dashboard/ProductController');
+const BuilderController = require('../app/controller/dashboard/BuilderController');
 
 
 const router = express.Router()
@@ -16,6 +17,10 @@ router.use("/admin", group((route) => {
       route.get('/add-product',ProductController.addEdit); 
       route.get('/edit-product/:id',ProductController.addEdit); 
       route.post('/create-product',ProductController.createUpdate); 
+
+      route.get('/form-builder',BuilderController.builder); 
+      route.post('/add-form',BuilderController.addForm); 
+      route.get('/:formId/delete-form',BuilderController.deleteForm); 
 }));
 
 
