@@ -7,5 +7,4 @@ module.exports = {
       rootPath:(function(path){
           return path
       })(rootDir)
-     
 }
