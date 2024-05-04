@@ -73,7 +73,6 @@ module.exports = {
         }
       })
     }
-    item.brand = await prisma.brand.findMany()
     
     return res.render('Backend/add-product',{ 
       layout: 'Backend/layout',
@@ -83,50 +82,9 @@ module.exports = {
 
   createUpdate:async function(req,res){
    
-      let {name,brand,price,additional,search,status,img,desc,filename} = req.body
-      
+      let {name,price,additional,search,status,desc,filename} = req.body
+     
       if(req.body.id){
-      
-        const existFileName = await prisma.product.findUnique({
-          where:{
-            id:+(req.body.id)
-          }
-        })
-        
-        if(existFileName.image!==filename){
-            if(req.files){
-              const file = req.files.img
-    
-              // Check if the file is an image
-              if (!file.mimetype.startsWith('image/')) {
-                return res.status(400).send('Only images are allowed.');
-              }
-              if(!fs.existsSync(rootDir)) {
-                fs.mkdirSync(rootDir, { recursive: true });
-              }
-    
-              // Remove existing image file if it exists
-              if(existFileName.image){
-                const fileExist = path.join(rootDir, existFileName.image);
-                if(fs.existsSync(fileExist)) {
-                    fs.unlinkSync(fileExist);
-                }
-              }
-              
-    
-              filename = generateRandomId()+file.name
-              const filePath = path.join(rootDir, filename);
-              file.mv(filePath,function(err){
-                if (err) {
-                  return res.status(500).send(err);
-                }
-              })
-    
-            }
-        }
-
-       
-
         const update = await prisma.product.update({
           where:{
              id:+(req.body.id)
@@ -142,37 +100,7 @@ module.exports = {
           },
         });
       
-        const categories = await prisma.category.update({
-          where: {
-            id: parseInt(req.body.catId) // Assuming catId is a string, convert it to an integer
-          },
-          data: {
-            additional: additional,
-            productId: parseInt(req.body.id) // Assuming id is a string, convert it to an integer
-          }
-        })
       }else{
-
-        if(req.files){
-          const file = req.files.img
-          // Check if the file is an image
-          if (!file.mimetype.startsWith('image/')) {
-            return res.status(400).send('Only images are allowed.');
-          }
-          if(!fs.existsSync(rootDir)) {
-            fs.mkdirSync(rootDir, { recursive: true });
-          }
-
-          filename = generateRandomId()+file.name
-          const filePath = path.join(rootDir, filename);
-          file.mv(filePath,function(err){
-            if (err) {
-              return res.status(500).send(err);
-            }
-          })
-
-        }
-
         const product = await prisma.product.create({
           data: {
             name: name,
@@ -192,8 +120,3 @@ module.exports = {
 
 }
 
-function generateRandomId() {
-  const randomNumber = Math.floor(Math.random() * 10000);
-  const randomId = randomNumber.toString().padStart(5, '0');
-  return randomId;
-}
