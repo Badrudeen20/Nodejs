@@ -10,10 +10,11 @@ CREATE TABLE "users" (
 );
 
 -- CreateTable
-CREATE TABLE "forms" (
+CREATE TABLE "dynamicforms" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
     "form" TEXT,
+    "status" TEXT NOT NULL DEFAULT 'ACTIVE',
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL
 );
@@ -35,7 +36,7 @@ CREATE TABLE "products" (
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "forms_name_key" ON "forms"("name");
+CREATE UNIQUE INDEX "dynamicforms_name_key" ON "dynamicforms"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "products_name_key" ON "products"("name");

@@ -23,13 +23,14 @@ model User {
 }
 
 
-model Form {
-  id        Int      @id @default(autoincrement())
+model Dynamicform {
+  id        Int       @id @default(autoincrement())
   name      String    @unique  
   form      String?   
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  @@map("forms")
+  status    String    @default("ACTIVE")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  @@map("dynamicforms")
 }
 
 model Product {
@@ -44,5 +45,6 @@ model Product {
   updatedAt      DateTime       @updatedAt @map("updated_at")
   @@map("products")
 }
+
 
 

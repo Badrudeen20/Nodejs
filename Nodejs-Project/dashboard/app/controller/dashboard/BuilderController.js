@@ -4,7 +4,9 @@ const prisma = new PrismaClient();
 module.exports = {
       
   builder:async function(req,res){
-    const forms = await prisma.form.findMany({})
+    const forms = await prisma.dynamicform.findMany({
+      where:{status:'ACTIVE'}
+    })
     return res.render('Backend/builder',{ 
       layout: 'Backend/layout',
       forms
@@ -14,17 +16,18 @@ module.exports = {
     const {type} = req.body
     if(type=='add'){
       const {form} = req.body
-      const isExist = await prisma.form.findMany({
+      const isExist = await prisma.dynamicform.findMany({
         where:{name:form}
       })
+     
       if(isExist.length==0){
-        const newForm = await prisma.form.create({
+        await prisma.dynamicform.create({
           data: { name: form}
         });
       }
     }else if(type=='update'){
       const {json,formId} = req.body
-      const update = await prisma.form.update({
+      const update = await prisma.dynamicform.update({
         where:{
           id:+formId
         },
@@ -38,7 +41,7 @@ module.exports = {
     return res.redirect('back')
   },
   deleteForm:async function(req,res){
-    await prisma.form.delete({
+    await prisma.dynamicform.delete({
       where: { id: +req.params.formId }
     });
     return res.redirect('back')
