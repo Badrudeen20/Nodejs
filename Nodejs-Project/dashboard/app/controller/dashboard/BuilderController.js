@@ -4,14 +4,25 @@ const prisma = new PrismaClient();
 module.exports = {
       
   builder:async function(req,res){
-    const forms = await prisma.dynamicform.findMany({
-      where:{status:'ACTIVE'}
-    })
-    return res.render('Backend/builder',{ 
+    // const forms = await prisma.dynamicform.findMany({
+    //   where:{status:'ACTIVE'}
+    // })
+    // return res.render('Backend/builder',{ 
+    //   layout: 'Backend/layout',
+    //   forms
+    // })
+    try {
+      const forms = await prisma.dynamicform.findMany({});
+      console.log(forms)
+      return res.render('Backend/builder',{ 
       layout: 'Backend/layout',
       forms
     })
+    } catch (error) {
+      console.error('Error:', error);
+    }
   },
+  
   addForm:async function(req,res){
     const {type} = req.body
     if(type=='add'){
