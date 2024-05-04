@@ -115,8 +115,3 @@ module.exports = {
 
 }
 
-function generateRandomId() {
-  const randomNumber = Math.floor(Math.random() * 10000);
-  const randomId = randomNumber.toString().padStart(5, '0');
-  return randomId;
-}
