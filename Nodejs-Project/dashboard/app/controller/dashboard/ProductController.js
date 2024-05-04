@@ -13,55 +13,48 @@ module.exports = {
     const page = req.query.start || 1;
     const pageSize = req.query.length || 10; // Default page size
     const offset = (page - 1) * pageSize;
-    const search = req.query.search || '';
-    try {
-      const totalCount = await prisma.product.count()
-      console.log(totalCount)
-    } catch (error) {
-      console.error('Error:', error);
-    }
-   
-  //   const searchCount = await prisma.product.count({
-  //     where: {
-  //       name: {
-  //         contains: search || '',
-  //       },
-  //       search: {
-  //         contains: search || '',
-  //       },
+    const search = req.query.search || '';  
+    const searchCount = await prisma.product.count({
+      where: {
+        name: {
+          contains: search || '',
+        },
+        search: {
+          contains: search || '',
+        },
        
-  //     }
-  //   });
+      }
+    });
 
-  //   let data = await prisma.product.findMany({
-  //         take: +pageSize,
-  //         skip: +offset,
-  //         where: {
-  //           name: {
-  //             contains: search || '',
-  //           },
-  //           search: {
-  //             contains: search || '',
-  //           },
-  //         },
-  //   });  
+    let data = await prisma.product.findMany({
+          take: +pageSize,
+          skip: +offset,
+          where: {
+            name: {
+              contains: search || '',
+            },
+            search: {
+              contains: search || '',
+            },
+          },
+    });  
 
-  //   data = data.map(item=>{
-  //     return  {
-  //      id:item.id,
-  //      name:item.name,
-  //      price:item.price,
-  //      status:item.status,
-  //      action:`<a href="edit-product/${item.id}" class="btn btn-success">Edit</a>`
-  //     }
-  //  })
+    data = data.map(item=>{
+      return  {
+       id:item.id,
+       name:item.name,
+       price:item.price,
+       status:item.status,
+       action:`<a href="edit-product/${item.id}" class="btn btn-success">Edit</a>`
+      }
+   })
    
-  //   return res.status(200).json({
-  //         success: true,
-  //         iTotalRecords: totalCount || 0,
-  //         iTotalDisplayRecords: searchCount || 0,
-  //         aaData : data || []
-  //   })
+    return res.status(200).json({
+          success: true,
+          iTotalRecords: totalCount || 0,
+          iTotalDisplayRecords: searchCount || 0,
+          aaData : data || []
+    })
 
   },
   addEdit:async function(req,res){
