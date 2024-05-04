@@ -8,20 +8,13 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const web = require('./route/web')
 const { rootPath, url } = require('./helper/url');
-const cluster = require('cluster')
-const os = require('os')
-const numcpus = os.cpus().length
-
-
 app.locals.rootPath = rootPath;
 
-app.use(expressLayouts);
 
+app.use(expressLayouts);
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views',__dirname + '/view')
 app.set('view engine','ejs') 
-
-
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
 
@@ -46,18 +39,8 @@ app.use(
 app.use(flash()); 
 app.use(web)
 
-
-if(cluster.isMaster){
-  for(let i = 0; i < numcpus; i++) {
-   cluster.fork()
-  }
-}else{
-  
 app.listen( PORT, function(req,res) {
   console.log( 'server running on ' + PORT );
 });
-
-}
-
 
 

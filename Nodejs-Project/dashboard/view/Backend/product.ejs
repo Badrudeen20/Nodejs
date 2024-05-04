@@ -76,7 +76,6 @@
                                       data:{start:pgno, length:pageLength,search:search}
                                 }).then ( function( json, textStatus, jqXHR ) {
                                       json["data"] = json["data"];
-                                      // json["recordsTotal"] = 40
                                       callback(json);
                                 });
                           },

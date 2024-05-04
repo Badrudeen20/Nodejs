@@ -38,6 +38,7 @@ model Product {
   name           String         @unique
   search         String
   price          Float
+  image          String?
   rating         Int            @default(0)
   status         String         @default("ACTIVE")
   description    String?        
