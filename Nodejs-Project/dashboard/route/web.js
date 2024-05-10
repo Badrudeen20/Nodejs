@@ -15,6 +15,7 @@ router.use("/admin", group((route) => {
       route.get('/products/list',ProductController.list); 
       route.get('/add-product',ProductController.addEdit); 
       route.get('/edit-product/:id',ProductController.addEdit); 
+      route.get('/delete-product/:id',ProductController.deleteProduct); 
       route.post('/create-product',ProductController.createUpdate); 
       route.get('/form-builder',BuilderController.builder); 
       route.post('/add-form',BuilderController.addForm); 

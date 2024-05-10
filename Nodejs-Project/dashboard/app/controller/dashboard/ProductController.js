@@ -47,7 +47,9 @@ module.exports = {
        name:item.name,
        price:item.price,
        status:item.status,
-       action:`<a href="edit-product/${item.id}" class="btn btn-success">Edit</a>`
+       action:`<a href="edit-product/${item.id}" class="btn btn-success">Edit</a>
+               <a href="delete-product/${item.id}" class="btn btn-danger">Delete</a>
+              `
       }
    })
    
@@ -73,6 +75,14 @@ module.exports = {
       layout: 'Backend/layout',
       item:item
     })
+  },
+  deleteProduct:async function(req,res){
+    const deleteProduct = await prisma.product.delete({
+      where: {
+        id: +(req.params.id),
+      },
+    })
+    return res.redirect('back')
   },
 
   createUpdate:async function(req,res){

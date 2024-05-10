@@ -22,6 +22,7 @@ async function startServer() {
         }
 
         type Todo {
+          
             id: ID!
             title: String!
             completed: Boolean

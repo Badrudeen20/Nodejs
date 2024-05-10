@@ -1,0 +1,63 @@
+<script>
+      function players(){
+            let playerList = []
+            return function(ele,player){
+                  if(playerList.includes(player)){
+                      $(ele).removeClass('active')
+                      playerList = playerList.filter((item)=>item!==player)
+                  }else{
+                    if(playerList.length < 11){
+                        $(ele).addClass('active')
+                        playerList.push(player)
+                    }else{
+                        
+                    }
+                  }
+                  
+            }
+      }
+      let selectPlayer = players()
+</script>
+<div class="container">
+      <h2>Select Player</h2>
+     
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <%for (const obj in menu){%>
+            <li class="nav-item " role="presentation">
+                  <button class="nav-link <%-(obj=='BATTER')?'active':''%>" data-bs-toggle="tab" data-bs-target="#<%- obj %>" type="button" role="tab"><%- obj %></button>
+            </li>
+        <% } %>
+        
+      </ul>
+      
+      <div class="tab-content" id="myTabContent">
+       <%for (const obj in menu){%>
+            <ul id="<%- obj %>" class="list-group tab-pane fade <%-(obj=='BATTER')?'show active':''%>" role="tabpanel" tabindex="0">
+                 
+                  <%for(const val of menu[obj]){%>
+                     <li role="button" tabindex="0"  class="list-group-item my-2" onclick="selectPlayer(this,'<%-val.Player%>')">
+                        <%-val.Player%>
+                     </li>
+                  <% } %>      
+            </ul>
+       <% } %>
+        
+      </div>
+    </div>
+    <script>
+      function addPlayer(player){
+            $.ajax({
+                  url: "<%-url%>select",
+                  method:'POST',
+                  data: {player:player},
+                  success: function (result) {
+                        console.log(result)
+                  },
+                  error: function (xhr, status, error) {
+                        console.log(error);
+                  }
+            }).done(function() {
+               
+            });
+      }
+    </script>

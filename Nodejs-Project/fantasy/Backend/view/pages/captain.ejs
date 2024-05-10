@@ -1,0 +1,29 @@
+<div class="container">
+      <h2>Select Captain</h2>
+     
+   
+      <ul class="list-group">
+            <%for (const player of players){%>
+                  <li class="list-group-item" onclick="addPlayer('<%-player%>')"><%-player%></li>
+            <% } %>
+           
+      </ul>
+    
+    </div>
+    <script>
+      function addPlayer(player){
+            $.ajax({
+                  url: "<%-url%>captain",
+                  method:'POST',
+                  data: {player:player},
+                  success: function (result) {
+                        console.log(result)
+                  },
+                  error: function (xhr, status, error) {
+                        console.log(error);
+                  }
+            }).done(function() {
+               
+            });
+      }
+    </script>

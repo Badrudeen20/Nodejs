@@ -22,29 +22,29 @@
                   <% if (typeof item.product !== 'undefined') { %>
                     value="<%-item.product.name%>"
                   <% } %>
-                   placeholder="Enter Name">
+                   placeholder="Enter Name" required>
                 </div>
                
                 <div class="form-group">
                   <label for="price">Price</label>
-                  <input type="number" name="price" class="form-control"
+                  <input type="number" name="price" required class="form-control"
                   <% if (typeof item.product !== 'undefined') { %>
                     value="<%-item.product.price%>"
                   <% } %>
                   id="price" placeholder="Enter Price">
                 </div>
                 <div class="form-group">
-                  <label for="status">Additional</label>
+                  <label for="status">Product Type</label>
                   <select class="form-control"  name="additional" id="status">
-                    <option value="Organic">Organic</option>
-                    <option value="Healthy">Healthy</option>
-                    <option value="Fresh">Fresh</option>
-                    <option value="Sale">Sale</option>
+                    <option value="Electronic">Electronic</option>
+                    <option value="Cloths">Cloths</option>
+                    <option value="Furniture">Furniture</option>
+                    <option value="Shoes">Shoes</option>
                   </select>
                 </div>
                 <div class="form-group">
                   <label for="search">Search</label>
-                  <input type="text" name="search" class="form-control" 
+                  <input type="text" required name="search" class="form-control" 
                   <% if (typeof item.product !== 'undefined') { %>
                     value="<%-item.product.search%>"
                   <% } %>
